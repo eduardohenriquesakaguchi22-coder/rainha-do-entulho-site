@@ -90,9 +90,9 @@ function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-          scrolled ? 'glass shadow-lg shadow-primary/10' : 'bg-transparent'
-        } rounded-full px-4 sm:px-6 py-2.5 w-[calc(100%-2rem)] max-w-5xl`}
+        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 glass rounded-full px-4 sm:px-6 py-2.5 w-[calc(100%-2rem)] max-w-5xl ${
+          scrolled ? 'shadow-lg shadow-primary/10' : 'shadow-md shadow-ink/5'
+        }`}
       >
         <div className="flex items-center justify-between gap-6">
           <a href="#inicio" className="flex items-center gap-2 group">
@@ -100,11 +100,7 @@ function Navbar() {
               <Truck className="h-5 w-5 text-deep" strokeWidth={2.4} />
               <span className="absolute inset-0 rounded-full ring-2 ring-primary/30 group-hover:ring-primary/50 transition" />
             </span>
-            <span
-              className={`font-display font-bold tracking-tight text-lg ${
-                scrolled ? 'text-ink' : 'text-white'
-              } transition-colors`}
-            >
+            <span className="font-display font-bold tracking-tight text-lg text-ink transition-colors">
               Rainha do Entulho
             </span>
           </a>
@@ -114,9 +110,7 @@ function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium tracking-tight lift-on-hover ${
-                  scrolled ? 'text-ink/70 hover:text-primary-dark' : 'text-white/90 hover:text-white'
-                } transition-colors`}
+                className="text-sm font-medium tracking-tight lift-on-hover text-ink/70 hover:text-primary-dark transition-colors"
               >
                 {link.label}
               </a>
@@ -135,7 +129,7 @@ function Navbar() {
 
           <button
             onClick={() => setOpen(true)}
-            className={`lg:hidden p-2 rounded-full ${scrolled ? 'text-ink' : 'text-white'}`}
+            className="lg:hidden p-2 rounded-full text-ink"
             aria-label="Abrir menu"
           >
             <Menu className="h-5 w-5" />
@@ -233,18 +227,18 @@ function Hero() {
       full: {
         webp: '/mascote/rainha-full.webp',
         png: '/mascote/rainha-full.png',
-        w: 570,
-        h: 2158,
+        w: 368,
+        h: 1400,
         cls:
-          'hidden lg:block h-[86vh] xl:h-[92vh] max-h-[900px] w-auto object-contain drop-shadow-[0_36px_60px_rgba(0,0,0,0.55)]',
+          'hidden lg:block h-[82vh] xl:h-[88vh] max-h-[860px] w-auto object-contain drop-shadow-[0_26px_40px_rgba(20,17,14,0.22)]',
       },
       threeq: {
         webp: '/mascote/rainha-3q.webp',
         png: '/mascote/rainha-3q.png',
-        w: 470,
+        w: 458,
         h: 1100,
         cls:
-          'block lg:hidden h-[42vh] max-h-[340px] sm:h-[50vh] sm:max-h-[430px] md:h-[56vh] md:max-h-[520px] w-auto object-contain drop-shadow-[0_28px_46px_rgba(0,0,0,0.5)]',
+          'block lg:hidden h-[44vh] max-h-[350px] sm:h-[52vh] sm:max-h-[440px] md:h-[58vh] md:max-h-[520px] w-auto object-contain drop-shadow-[0_18px_28px_rgba(20,17,14,0.18)]',
       },
     }[variant]
     return (
@@ -255,7 +249,7 @@ function Hero() {
           alt="Rainha do Entulho — personagem oficial da marca, de coroa e faixa, com camiseta do time"
           width={cfg.w}
           height={cfg.h}
-          className={`relative z-10 mx-auto ${cfg.cls}`}
+          className={`relative z-10 ${cfg.cls}`}
         />
       </picture>
     )
@@ -265,68 +259,42 @@ function Hero() {
     <section
       id="inicio"
       ref={heroRef}
-      className="relative min-h-[100dvh] w-full overflow-hidden bg-deep isolate"
+      className="relative w-full overflow-hidden bg-background isolate"
     >
-      {/* ---------- Designed background (identidade: preto + dourado + vermelho) ---------- */}
+      {/* faixa de sinalização no topo — nó de construção civil */}
+      <div
+        className="absolute inset-x-0 top-0 z-20 h-1.5"
+        style={{ backgroundImage: 'repeating-linear-gradient(45deg,#F5A623 0 16px,#14110E 16px 32px)' }}
+      />
+
+      {/* fundo claro com leve grid de projeto */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#221a12] via-deep to-[#0d0b09]" />
-        <div className="absolute inset-0 grid-bg opacity-[0.12]" />
-        {/* luz quente principal, atrás da personagem */}
-        <div className="absolute right-[-18%] top-1/2 h-[130vh] w-[85vw] -translate-y-1/2 rounded-full bg-primary/20 blur-[130px]" />
-        {/* respingo vermelho da identidade */}
-        <div className="absolute bottom-[-6%] right-[4%] h-[55vh] w-[42vh] rounded-full bg-accent/25 blur-[100px]" />
-        {/* disco da marca (círculo da coroa) */}
-        <div className="hero-disc absolute bottom-[-8%] right-[-4%] hidden aspect-square w-[min(74vh,580px)] rounded-full border border-primary/20 bg-gradient-to-b from-primary/10 to-transparent lg:block" />
-        {/* coroa marca-d'água atrás da cabeça */}
-        <svg
-          className="absolute right-[6%] top-[8%] hidden h-40 w-40 text-primary/10 xl:block"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path d="M3 8l3.5 3L12 4l5.5 7L21 8l-1.8 10H4.8L3 8z" />
-        </svg>
-        {/* faixa de sinalização — o "chão" da personagem */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-1.5 opacity-60"
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(45deg,#F5A623 0 14px,#14110E 14px 28px)',
-          }}
-        />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+        <div className="absolute inset-0 grid-bg opacity-60" />
+        <div className="absolute -left-40 top-16 h-80 w-80 rounded-full bg-accent/5 blur-3xl" />
       </div>
 
-      {/* partículas de poeira */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute right-[40%] top-1/4 h-2 w-2 animate-float rounded-full bg-primary/70" style={{ animationDelay: '0s' }} />
-        <div className="absolute right-[46%] top-[58%] h-1.5 w-1.5 animate-float rounded-full bg-white/40" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute right-[34%] top-[40%] h-1 w-1 animate-float rounded-full bg-primary-light/80" style={{ animationDelay: '3s' }} />
-      </div>
-
-      {/* ---------- Conteúdo ---------- */}
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-7xl flex-col px-6 pb-10 pt-28 sm:px-10 lg:grid lg:grid-cols-[1.04fr_0.96fr] lg:items-center lg:gap-10 lg:px-16 lg:py-0">
-        {/* Texto */}
-        <div className="hero-copy text-center lg:py-16 lg:text-left">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary-light/80 sm:text-xs">
-            Única no Google de Uruaçu · 6 anos de mercado
+      <div className="relative z-10 mx-auto grid min-h-[100dvh] max-w-7xl grid-cols-1 items-start gap-4 px-6 pb-16 pt-28 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-16 lg:pt-24">
+        {/* ---------- Texto ---------- */}
+        <div className="hero-copy text-center lg:text-left">
+          <p className="inline-flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-accent sm:text-xs">
+            <span className="h-2 w-2 rounded-[2px] bg-accent" />
+            Uruaçu-GO · 6 anos de mercado
           </p>
-          <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.03] tracking-tight text-white sm:text-5xl lg:text-[3.5rem] xl:text-6xl">
+          <h1 className="mt-4 font-display text-[2.6rem] font-extrabold leading-[1.02] tracking-tight text-ink sm:text-5xl lg:text-[3.5rem] xl:text-6xl">
             Precisou de caçamba?
-            <span className="mt-1 block font-serif text-5xl font-medium italic text-primary sm:text-6xl lg:text-[4rem] xl:text-7xl">
-              Chama a Rainha.
-            </span>
+            <span className="mt-1 block text-accent">Chama a Rainha.</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-lg text-base leading-relaxed text-white/75 sm:text-lg lg:mx-0">
-            Locação de caçambas para obras, reformas e limpeza com agilidade e praticidade.
+          <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg lg:mx-0">
+            Locação de caçambas para obras, reformas e limpeza — com agilidade e praticidade,
+            direto com quem faz.
           </p>
 
-          <div className="mt-9 flex flex-col items-center gap-3.5 sm:flex-row lg:items-start lg:justify-start">
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:items-start lg:justify-start">
             <a
               href={WHATSAPP_URL_CACAMBA}
               target="_blank"
               rel="noreferrer"
-              className="magnetic-btn ring-pulse group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-bold text-deep drop-shadow-[0_14px_34px_rgba(245,166,35,0.5)]"
+              className="magnetic-btn group inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-bold text-deep shadow-[0_12px_28px_-6px_rgba(245,166,35,0.6)] sm:w-auto"
             >
               <MessageCircle className="h-5 w-5" strokeWidth={2.5} />
               Pedir minha caçamba
@@ -334,49 +302,56 @@ function Hero() {
             </a>
             <a
               href={`tel:+${WHATSAPP_NUMBER}`}
-              className="lift-on-hover inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 font-medium text-white backdrop-blur-md"
+              className="lift-on-hover inline-flex w-full items-center justify-center gap-2 rounded-full border border-ink/15 bg-surface px-6 py-4 font-semibold text-ink sm:w-auto"
             >
               <Phone className="h-4 w-4" />
               {WHATSAPP_DISPLAY}
             </a>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-start">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-600/20 bg-emerald-600/10 px-3 py-1.5">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-emerald-700">
                 A Rainha responde agora
               </span>
             </span>
-          </div>
-
-          <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-wider text-white/55 sm:text-[11px] lg:justify-start">
-            {['Entrega no mesmo dia', 'Sem multa escondida', 'Uruaçu-GO'].map((t) => (
-              <span key={t} className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+            {['Entrega no mesmo dia', 'Sem multa escondida'].map((t) => (
+              <span
+                key={t}
+                className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted sm:text-[11px]"
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary-dark" />
                 {t}
               </span>
             ))}
           </div>
         </div>
 
-        {/* Personagem */}
-        <div className="hero-character relative mt-8 flex justify-center sm:mt-4 lg:mt-0 lg:mr-[-3%] lg:mb-[-2vh] lg:justify-end lg:self-end">
-          {/* halo/disco atrás da personagem no mobile e tablet */}
-          <div className="hero-disc absolute bottom-0 left-1/2 aspect-square w-[92%] max-w-[440px] -translate-x-1/2 rounded-full bg-primary/12 blur-2xl lg:hidden" />
-          <div className="hero-disc absolute bottom-2 left-1/2 aspect-square w-[80%] max-w-[380px] -translate-x-1/2 rounded-full border border-primary/25 lg:hidden" />
+        {/* ---------- Personagem ---------- */}
+        <div className="hero-character relative flex min-h-[48vh] items-end justify-center sm:min-h-[54vh] lg:min-h-[86vh] lg:justify-end lg:self-stretch">
+          {/* forma sólida da marca atrás da personagem */}
+          <div className="hero-disc absolute bottom-[7%] left-1/2 aspect-square w-[80%] max-w-[300px] -translate-x-1/2 rounded-full bg-primary sm:max-w-[360px] lg:left-auto lg:right-[3%] lg:bottom-[5%] lg:h-[60vh] lg:max-h-[600px] lg:w-auto lg:translate-x-0" />
+          {/* círculo vermelho de apoio (desktop) */}
+          <div className="hero-disc absolute right-[4%] top-[8%] hidden h-24 w-24 rounded-full bg-accent lg:block xl:h-32 xl:w-32" />
+          {/* sombra de chão */}
+          <div className="absolute bottom-[4%] left-1/2 h-6 w-[60%] max-w-[300px] -translate-x-1/2 rounded-[100%] bg-ink/25 blur-lg lg:left-auto lg:right-[14%] lg:w-[38%]" />
+          {/* chip flutuante — guia online */}
+          <div className="absolute left-[-4%] top-[18%] z-20 hidden items-center gap-2.5 rounded-2xl border border-divider bg-surface px-3.5 py-2.5 shadow-xl shadow-ink/10 lg:flex">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/15">
+              <MessageCircle className="h-4 w-4 text-emerald-600" strokeWidth={2.5} />
+            </span>
+            <span className="leading-tight">
+              <span className="block font-mono text-[9px] uppercase tracking-widest text-muted">no WhatsApp</span>
+              <span className="block font-display text-xs font-bold text-ink">Resposta rápida</span>
+            </span>
+          </div>
           {characterImg('full')}
           {characterImg('threeq')}
         </div>
-      </div>
-
-      {/* indicador de rolar */}
-      <div className="absolute bottom-6 left-6 hidden flex-col items-center gap-2 text-white/45 sm:left-10 md:flex lg:left-16">
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Rolar</span>
-        <div className="h-8 w-px bg-gradient-to-b from-white/45 to-transparent" />
       </div>
     </section>
   )
