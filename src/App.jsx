@@ -31,6 +31,7 @@ gsap.registerPlugin(ScrollTrigger)
 const WHATSAPP_NUMBER = '5562982322955'
 const WHATSAPP_DISPLAY = '(62) 98232-2955'
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Oi! Vim pelo site e quero saber mais sobre a locação de container.')}`
+const WHATSAPP_URL_CACAMBA = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Oi! Vim pelo site e quero pedir uma caçamba. Pode me passar como funciona?')}`
 
 const NAV_LINKS = [
   { label: 'Início', href: '#inicio' },
@@ -196,105 +197,174 @@ function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.hero-line-1', { y: 40, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.3 })
-      gsap.from('.hero-line-2', { y: 60, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 0.5 })
-      gsap.from('.hero-cta, .hero-meta', {
-        y: 24,
+      gsap.from('.hero-copy > *', {
+        y: 28,
         opacity: 0,
-        duration: 0.8,
+        duration: 0.9,
         ease: 'power3.out',
-        delay: 0.8,
         stagger: 0.12,
+        delay: 0.15,
       })
-      gsap.from('.hero-mascot', { x: 70, opacity: 0, duration: 1.4, ease: 'power3.out', delay: 0.5 })
+      gsap.from('.hero-character', {
+        y: 44,
+        opacity: 0,
+        scale: 0.96,
+        duration: 1.3,
+        ease: 'power3.out',
+        delay: 0.35,
+      })
+      gsap.from('.hero-disc', { scale: 0.6, opacity: 0, duration: 1.6, ease: 'power3.out', delay: 0.2 })
     }, heroRef)
-    return () => ctx.revert()
+    // segurança: se a animação não rodar (aba em segundo plano, rAF pausado, etc.),
+    // garante que o conteúdo do hero fique visível
+    const fallback = setTimeout(() => {
+      gsap.set('.hero-copy > *, .hero-character, .hero-disc', {
+        clearProps: 'opacity,transform',
+      })
+    }, 2600)
+    return () => {
+      clearTimeout(fallback)
+      ctx.revert()
+    }
   }, [])
 
-  return (
-    <section id="inicio" ref={heroRef} className="relative min-h-[100dvh] w-full overflow-hidden">
-      <div className="absolute inset-0">
+  const characterImg = (variant) => {
+    const cfg = {
+      full: {
+        webp: '/mascote/rainha-full.webp',
+        png: '/mascote/rainha-full.png',
+        w: 570,
+        h: 2158,
+        cls:
+          'hidden lg:block h-[86vh] xl:h-[92vh] max-h-[900px] w-auto object-contain drop-shadow-[0_36px_60px_rgba(0,0,0,0.55)]',
+      },
+      threeq: {
+        webp: '/mascote/rainha-3q.webp',
+        png: '/mascote/rainha-3q.png',
+        w: 470,
+        h: 1100,
+        cls:
+          'block lg:hidden h-[42vh] max-h-[340px] sm:h-[50vh] sm:max-h-[430px] md:h-[56vh] md:max-h-[520px] w-auto object-contain drop-shadow-[0_28px_46px_rgba(0,0,0,0.5)]',
+      },
+    }[variant]
+    return (
+      <picture>
+        <source srcSet={cfg.webp} type="image/webp" />
         <img
-          src="https://images.unsplash.com/photo-1587582423116-ec07293f0395?auto=format&fit=crop&w=2400&q=80"
-          alt="Carpinteiro trabalhando na estrutura de uma obra"
-          className="w-full h-full object-cover"
+          src={cfg.png}
+          alt="Rainha do Entulho — personagem oficial da marca, de coroa e faixa, com camiseta do time"
+          width={cfg.w}
+          height={cfg.h}
+          className={`relative z-10 mx-auto ${cfg.cls}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-tr from-deep/90 via-deep/55 to-primary/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-deep via-deep/30 to-transparent" />
+      </picture>
+    )
+  }
+
+  return (
+    <section
+      id="inicio"
+      ref={heroRef}
+      className="relative min-h-[100dvh] w-full overflow-hidden bg-deep isolate"
+    >
+      {/* ---------- Designed background (identidade: preto + dourado + vermelho) ---------- */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#221a12] via-deep to-[#0d0b09]" />
+        <div className="absolute inset-0 grid-bg opacity-[0.12]" />
+        {/* luz quente principal, atrás da personagem */}
+        <div className="absolute right-[-18%] top-1/2 h-[130vh] w-[85vw] -translate-y-1/2 rounded-full bg-primary/20 blur-[130px]" />
+        {/* respingo vermelho da identidade */}
+        <div className="absolute bottom-[-6%] right-[4%] h-[55vh] w-[42vh] rounded-full bg-accent/25 blur-[100px]" />
+        {/* disco da marca (círculo da coroa) */}
+        <div className="hero-disc absolute bottom-[-8%] right-[-4%] hidden aspect-square w-[min(74vh,580px)] rounded-full border border-primary/20 bg-gradient-to-b from-primary/10 to-transparent lg:block" />
+        {/* coroa marca-d'água atrás da cabeça */}
+        <svg
+          className="absolute right-[6%] top-[8%] hidden h-40 w-40 text-primary/10 xl:block"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M3 8l3.5 3L12 4l5.5 7L21 8l-1.8 10H4.8L3 8z" />
+        </svg>
+        {/* faixa de sinalização — o "chão" da personagem */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-1.5 opacity-60"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(45deg,#F5A623 0 14px,#14110E 14px 28px)',
+          }}
+        />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       </div>
 
-      {/* Decorative floating dust/spark particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 right-[18%] h-2 w-2 rounded-full bg-primary/70 animate-float" style={{ animationDelay: '0s' }} />
-        <div className="absolute top-[55%] right-[10%] h-1.5 w-1.5 rounded-full bg-white/40 animate-float" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-[40%] right-[26%] h-1 w-1 rounded-full bg-primary-light/80 animate-float" style={{ animationDelay: '3s' }} />
+      {/* partículas de poeira */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute right-[40%] top-1/4 h-2 w-2 animate-float rounded-full bg-primary/70" style={{ animationDelay: '0s' }} />
+        <div className="absolute right-[46%] top-[58%] h-1.5 w-1.5 animate-float rounded-full bg-white/40" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute right-[34%] top-[40%] h-1 w-1 animate-float rounded-full bg-primary-light/80" style={{ animationDelay: '3s' }} />
       </div>
 
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
-      {/* Mascote — Rainha do Entulho (recorte) */}
-      <div className="hero-mascot pointer-events-none absolute bottom-0 right-2 2xl:right-16 z-[6] hidden xl:block">
-        <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 h-[65%] w-[140%] rounded-full bg-primary/25 blur-[90px]" />
-        <picture>
-          <source srcSet="/mascote/rainha-full.webp" type="image/webp" />
-          <img
-            src="/mascote/rainha-full.png"
-            alt="Rainha do Entulho — mascote da marca, de coroa e faixa, com uniforme de trabalho"
-            width="370"
-            height="1400"
-            className="relative h-[80vh] xl:h-[78vh] 2xl:h-[86vh] max-h-[880px] w-auto drop-shadow-2xl"
-          />
-        </picture>
-      </div>
-
-      <div className="relative z-10 flex min-h-[100dvh] flex-col items-center justify-center text-center">
-        <div className="px-6 sm:px-10 lg:px-16 max-w-4xl">
-          <p className="hero-meta font-mono text-xs uppercase tracking-[0.25em] text-white/70 mb-6">
+      {/* ---------- Conteúdo ---------- */}
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-7xl flex-col px-6 pb-10 pt-28 sm:px-10 lg:grid lg:grid-cols-[1.04fr_0.96fr] lg:items-center lg:gap-10 lg:px-16 lg:py-0">
+        {/* Texto */}
+        <div className="hero-copy text-center lg:py-16 lg:text-left">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary-light/80 sm:text-xs">
             Única no Google de Uruaçu · 6 anos de mercado
           </p>
-          <h1 className="font-display font-extrabold text-white leading-[0.95] tracking-tight">
-            <span className="hero-line-1 block text-4xl sm:text-5xl md:text-6xl">
-              Caçamba na obra.
-            </span>
-            <span
-              className="hero-line-2 block font-serif italic font-medium text-primary text-6xl sm:text-7xl md:text-8xl mt-2"
-              style={{ lineHeight: '0.92' }}
-            >
-              Sem enrolação.
+          <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.03] tracking-tight text-white sm:text-5xl lg:text-[3.5rem] xl:text-6xl">
+            Precisou de caçamba?
+            <span className="mt-1 block font-serif text-5xl font-medium italic text-primary sm:text-6xl lg:text-[4rem] xl:text-7xl">
+              Chama a Rainha.
             </span>
           </h1>
-
-          <p className="hero-meta mx-auto max-w-xl text-white/75 text-base sm:text-lg mt-8 leading-relaxed">
-            A Rainha do Entulho leva o container até você e busca quando o serviço acabar.
-            Container de 5m³, locação semanal ou mensal, direto com quem faz.
-            <span className="text-white"> Sem central de atendimento.</span>
+          <p className="mx-auto mt-6 max-w-lg text-base leading-relaxed text-white/75 sm:text-lg lg:mx-0">
+            Locação de caçambas para obras, reformas e limpeza com agilidade e praticidade.
           </p>
 
-          <div className="hero-cta mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-9 flex flex-col items-center gap-3.5 sm:flex-row lg:items-start lg:justify-start">
             <a
-              href={WHATSAPP_URL}
+              href={WHATSAPP_URL_CACAMBA}
               target="_blank"
               rel="noreferrer"
-              className="magnetic-btn group inline-flex items-center justify-center gap-2 bg-primary text-deep font-semibold px-7 py-4 rounded-full shadow-2xl shadow-primary/40"
+              className="magnetic-btn ring-pulse group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-bold text-deep drop-shadow-[0_14px_34px_rgba(245,166,35,0.5)]"
             >
-              <MessageCircle className="h-4 w-4" />
-              Chamar no WhatsApp
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <MessageCircle className="h-5 w-5" strokeWidth={2.5} />
+              Pedir minha caçamba
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
             <a
               href={`tel:+${WHATSAPP_NUMBER}`}
-              className="lift-on-hover inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md text-white border border-white/20 font-medium px-7 py-4 rounded-full"
+              className="lift-on-hover inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 font-medium text-white backdrop-blur-md"
             >
               <Phone className="h-4 w-4" />
               {WHATSAPP_DISPLAY}
             </a>
           </div>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-wider text-white/55 sm:text-[11px] lg:justify-start">
+            {['Entrega no mesmo dia', 'Sem multa escondida', 'Uruaçu-GO'].map((t) => (
+              <span key={t} className="inline-flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
 
-        <div className="absolute bottom-8 right-6 sm:right-12 hidden md:flex flex-col items-center gap-2 text-white/50">
-          <span className="font-mono uppercase text-[10px] tracking-[0.3em]">Rolar</span>
-          <div className="h-8 w-px bg-gradient-to-b from-white/50 to-transparent" />
+        {/* Personagem */}
+        <div className="hero-character relative mt-8 flex justify-center sm:mt-4 lg:mt-0 lg:mr-[-3%] lg:mb-[-2vh] lg:justify-end lg:self-end">
+          {/* halo/disco atrás da personagem no mobile e tablet */}
+          <div className="hero-disc absolute bottom-0 left-1/2 aspect-square w-[92%] max-w-[440px] -translate-x-1/2 rounded-full bg-primary/12 blur-2xl lg:hidden" />
+          <div className="hero-disc absolute bottom-2 left-1/2 aspect-square w-[80%] max-w-[380px] -translate-x-1/2 rounded-full border border-primary/25 lg:hidden" />
+          {characterImg('full')}
+          {characterImg('threeq')}
         </div>
+      </div>
+
+      {/* indicador de rolar */}
+      <div className="absolute bottom-6 left-6 hidden flex-col items-center gap-2 text-white/45 sm:left-10 md:flex lg:left-16">
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Rolar</span>
+        <div className="h-8 w-px bg-gradient-to-b from-white/45 to-transparent" />
       </div>
     </section>
   )
