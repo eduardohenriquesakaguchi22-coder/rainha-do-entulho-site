@@ -341,7 +341,19 @@ function Hero() {
             </a>
           </div>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-wider text-white/55 sm:text-[11px] lg:justify-start">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">
+                A Rainha responde agora
+              </span>
+            </span>
+          </div>
+
+          <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-wider text-white/55 sm:text-[11px] lg:justify-start">
             {['Entrega no mesmo dia', 'Sem multa escondida', 'Uruaçu-GO'].map((t) => (
               <span key={t} className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
@@ -1028,27 +1040,30 @@ function Protocol() {
       title: 'Chamado',
       tagline: 'Você chama no WhatsApp.',
       text: 'Manda sua localização e o que precisa — sem burocracia, sem formulário. Antônio mesmo responde.',
-      image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80',
-      alt: 'Conversa e planejamento de obra',
+      image: '/mascote/cena-chamado.webp',
+      alt: 'Rainha do Entulho avaliando o entulho no canteiro de obra',
       meta: 'Passo 1 / Contato',
+      objectPos: '62% center',
     },
     {
       num: '02',
       title: 'Entrega',
       tagline: 'O container chega no endereço.',
       text: 'Dentro do perímetro urbano de Uruaçu, com hora combinada. Você recebe o container de 5m³ prontinho pra usar.',
-      image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80',
-      alt: 'Caminhão entregando container em canteiro de obra',
+      image: '/mascote/cena-frota.webp',
+      alt: 'Caminhão da Rainha do Entulho com o container carregado',
       meta: 'Passo 2 / Entrega',
+      objectPos: '38% center',
     },
     {
       num: '03',
       title: 'Retirada',
       tagline: 'A gente busca e leva embora.',
       text: 'Quando o serviço acaba, você avisa e a gente retira o container cheio — o entulho vai pro destino certo.',
-      image: 'https://images.unsplash.com/photo-1580901368919-7738efb0f87e?auto=format&fit=crop&w=1200&q=80',
-      alt: 'Escavadeira retirando entulho e pedras',
+      image: '/mascote/cena-retirada.webp',
+      alt: 'Caminhão da Rainha do Entulho levando o container cheio',
       meta: 'Passo 3 / Retirada',
+      objectPos: '32% center',
     },
   ]
 
@@ -1091,7 +1106,13 @@ function Protocol() {
               </div>
 
               <div className="lg:col-span-2 relative overflow-hidden min-h-[300px] lg:min-h-full bg-deep">
-                <img src={step.image} alt={step.alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                <img
+                  src={step.image}
+                  alt={step.alt}
+                  loading="lazy"
+                  style={{ objectPosition: step.objectPos || 'center' }}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-deep/60 via-transparent to-deep/15" />
                 <div className="absolute top-5 left-5 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full pl-3 pr-4 py-1.5 shadow-lg">
                   <span className="h-1.5 w-1.5 rounded-full bg-primary" />
@@ -1291,17 +1312,26 @@ function ContactForm() {
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-5">
-            <picture>
-              <source srcSet="/mascote/rainha-bust.webp" type="image/webp" />
-              <img
-                src="/mascote/rainha-bust.png"
-                alt="Rainha do Entulho"
-                width="120"
-                height="110"
-                loading="lazy"
-                className="mb-5 h-20 w-20 rounded-full object-cover object-top border-2 border-primary/40 bg-primary/5"
-              />
-            </picture>
+            <div className="mb-5 flex items-center gap-3">
+              <picture>
+                <source srcSet="/mascote/rainha-bust.webp" type="image/webp" />
+                <img
+                  src="/mascote/rainha-bust.png"
+                  alt="Rainha do Entulho"
+                  width="120"
+                  height="110"
+                  loading="lazy"
+                  className="h-20 w-20 rounded-full object-cover object-top border-2 border-primary/40 bg-primary/5"
+                />
+              </picture>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                </span>
+                <span className="font-mono text-[9px] uppercase tracking-widest text-emerald-700">Online agora</span>
+              </span>
+            </div>
             <span className="font-mono text-xs uppercase tracking-[0.25em] text-primary-dark">╱ Contato</span>
             <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-ink mt-4 leading-[1.05] tracking-tight">
               Como a gente
