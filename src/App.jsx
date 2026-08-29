@@ -206,6 +206,7 @@ function Hero() {
         delay: 0.8,
         stagger: 0.12,
       })
+      gsap.from('.hero-mascot', { x: 70, opacity: 0, duration: 1.4, ease: 'power3.out', delay: 0.5 })
     }, heroRef)
     return () => ctx.revert()
   }, [])
@@ -230,6 +231,21 @@ function Hero() {
       </div>
 
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+      {/* Mascote — Rainha do Entulho (recorte) */}
+      <div className="hero-mascot pointer-events-none absolute bottom-0 right-2 2xl:right-16 z-[6] hidden xl:block">
+        <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 h-[65%] w-[140%] rounded-full bg-primary/25 blur-[90px]" />
+        <picture>
+          <source srcSet="/mascote/rainha-full.webp" type="image/webp" />
+          <img
+            src="/mascote/rainha-full.png"
+            alt="Rainha do Entulho — mascote da marca, de coroa e faixa, com uniforme de trabalho"
+            width="370"
+            height="1400"
+            className="relative h-[80vh] xl:h-[78vh] 2xl:h-[86vh] max-h-[880px] w-auto drop-shadow-2xl"
+          />
+        </picture>
+      </div>
 
       <div className="relative z-10 flex min-h-[100dvh] flex-col items-center justify-center text-center">
         <div className="px-6 sm:px-10 lg:px-16 max-w-4xl">
@@ -278,6 +294,94 @@ function Hero() {
         <div className="absolute bottom-8 right-6 sm:right-12 hidden md:flex flex-col items-center gap-2 text-white/50">
           <span className="font-mono uppercase text-[10px] tracking-[0.3em]">Rolar</span>
           <div className="h-8 w-px bg-gradient-to-b from-white/50 to-transparent" />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ----------------------------------------------------------------
+   Quem é a Rainha — apresentação da mascote
+---------------------------------------------------------------- */
+function MascotIntro() {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from('.mi-img', {
+        y: 44,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: ref.current, start: 'top 78%' },
+      })
+      gsap.from('.mi-copy > *', {
+        y: 24,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: ref.current, start: 'top 72%' },
+      })
+    }, ref)
+    return () => ctx.revert()
+  }, [])
+
+  const bullets = [
+    'Entrega e retirada dentro de Uruaçu',
+    'Prazo combinado, sem multa escondida',
+    'Falou com a gente, falou com quem faz',
+  ]
+
+  return (
+    <section ref={ref} className="relative py-24 sm:py-32 px-6 sm:px-10 lg:px-16 bg-background overflow-hidden">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="mi-img relative">
+          <div className="absolute -inset-3 sm:-inset-4 bg-primary/10 rounded-[2.5rem] -rotate-2" />
+          <picture>
+            <source srcSet="/mascote/rainha-patio.webp" type="image/webp" />
+            <img
+              src="/mascote/rainha-patio.jpg"
+              alt="Rainha do Entulho no pátio da empresa, ao lado da caçamba com a marca"
+              width="1047"
+              height="1300"
+              loading="lazy"
+              className="relative w-full rounded-[2rem] border border-divider shadow-2xl shadow-primary/10 object-cover"
+            />
+          </picture>
+          <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white bg-deep/80 backdrop-blur px-3 py-1.5 rounded-full">
+            Pátio próprio · Uruaçu-GO
+          </span>
+        </div>
+
+        <div className="mi-copy">
+          <span className="font-mono text-xs uppercase tracking-[0.25em] text-primary-dark">╱ Quem é a Rainha</span>
+          <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-ink mt-4 leading-[1.05] tracking-tight">
+            Tem coroa, mas
+            <span className="block font-serif italic font-medium text-primary-dark">trabalha na obra.</span>
+          </h2>
+          <p className="text-muted text-lg mt-6 leading-relaxed max-w-md">
+            A Rainha do Entulho é o jeito da gente atender Uruaçu há 6 anos: caçamba no dia
+            combinado, retirada sem você precisar cobrar, e a mesma pessoa do começo ao fim.
+            Sem central, sem terceiro.
+          </p>
+          <ul className="mt-8 space-y-3">
+            {bullets.map((t) => (
+              <li key={t} className="flex items-center gap-3 text-ink">
+                <CheckCircle2 className="h-5 w-5 text-primary-dark flex-none" />
+                <span className="font-medium">{t}</span>
+              </li>
+            ))}
+          </ul>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="magnetic-btn mt-9 inline-flex items-center gap-2 bg-primary text-deep font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-primary/30"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Chamar a Rainha no WhatsApp
+          </a>
         </div>
       </div>
     </section>
@@ -1117,6 +1221,17 @@ function ContactForm() {
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-5">
+            <picture>
+              <source srcSet="/mascote/rainha-bust.webp" type="image/webp" />
+              <img
+                src="/mascote/rainha-bust.png"
+                alt="Rainha do Entulho"
+                width="120"
+                height="110"
+                loading="lazy"
+                className="mb-5 h-20 w-20 rounded-full object-cover object-top border-2 border-primary/40 bg-primary/5"
+              />
+            </picture>
             <span className="font-mono text-xs uppercase tracking-[0.25em] text-primary-dark">╱ Contato</span>
             <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-ink mt-4 leading-[1.05] tracking-tight">
               Como a gente
@@ -1350,6 +1465,7 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <MascotIntro />
         <Features />
         <Pillars />
         <Protocol />
