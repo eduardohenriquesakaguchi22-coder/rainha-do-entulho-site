@@ -12,6 +12,21 @@ import {
    O que não foi confirmado fica FORA da tela (comentado abaixo).
    ================================================================ */
 
+/* ================================================================
+   USO DA PERSONAGEM — regra de assets (não repetir a mesma pose)
+   Cada aparição da Rainha tem pose + função própria:
+     HERO          → /mascote/hero-operacao.webp       (cena real: Rainha + caminhão + caçamba)
+     DIFERENCIAIS  → /mascote/diferenciais-rainha.webp (foto editorial: Rainha + pátio/caçambas)
+     CTA WHATSAPP  → /mascote/rainha-cta-foto.webp     (retrato fornecido pelo cliente)
+   Spares prontos: /mascote/rainha-hero.webp, /mascote/rainha-apontando.webp,
+   /mascote/rainha-apresentando.webp, /mascote/rainha-whatsapp.webp (3D oficial, smartphone).
+   Assets antigos rainha-3q / rainha-bust foram aposentados (mesma pose frontal 3x).
+
+   Universo da marca (objetos 3D isolados, recortados da folha de refs):
+     obj-tijolos, obj-ferramentas, obj-capacete, obj-cone, obj-planta, obj-coroa
+   Fotografia real: cacamba-real (Frota). Cena/ambiente: rainha-patio.
+   ================================================================ */
+
 /* ---------- Dados reais confirmados ---------- */
 const WHATSAPP_NUMBER = '5562982322955'
 const WHATSAPP_DISPLAY = '(62) 98232-2955'
@@ -277,25 +292,29 @@ function Hero() {
             </Reveal>
           </div>
 
+          {/* HERO · cena real da operação (Captura 01):
+              /mascote/hero-operacao.webp — Rainha + caminhão poliguindaste + caçamba carregada.
+              Frame editorial: cantos arredondados, vinheta pra profundidade, fio dourado de marca
+              e os dois cards reais ancorados às bordas. rainha-hero.webp fica como spare. */}
           <Reveal delay={140} className="relative mt-4 lg:mt-0">
-            <div className="relative rounded-xl2 bg-cream-2/70 ring-1 ring-line overflow-hidden">
-              <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-red/[0.12]" aria-hidden />
-              <div className="relative h-[380px] sm:h-[440px] lg:h-[470px] flex items-end justify-center">
-                <img
-                  src="/mascote/rainha-full.webp"
-                  alt="A Rainha do Entulho, personagem da marca, com coroa e faixa"
-                  width="368" height="1400"
-                  fetchPriority="high" decoding="async"
-                  className="h-full w-auto object-contain drop-shadow-xl select-none pointer-events-none"
-                />
-              </div>
+            <div className="relative overflow-hidden rounded-xl2 ring-1 ring-charcoal/10 shadow-card">
+              <img
+                src="/mascote/hero-operacao.webp"
+                alt="A Rainha do Entulho ao lado do caminhão poliguindaste com a caçamba carregada, em Uruaçu-GO"
+                width="800" height="800"
+                fetchPriority="high" decoding="async"
+                className="w-full aspect-square object-cover object-[50%_38%] select-none"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/45 via-transparent to-charcoal/10" aria-hidden />
+              <div className="absolute inset-0 rounded-xl2 ring-1 ring-inset ring-white/10" aria-hidden />
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-70" aria-hidden />
             </div>
-            <div className="absolute top-3 -right-2 sm:right-1 hidden sm:flex flex-col items-start rounded-card bg-cream px-3.5 py-2.5 shadow-lift ring-1 ring-line">
+            <div className="absolute top-5 -right-3 sm:-right-4 hidden sm:flex flex-col items-start rounded-card bg-cream/95 backdrop-blur px-3.5 py-2.5 shadow-lift ring-1 ring-line">
               <span className="text-2xs font-semibold uppercase tracking-[0.12em] text-ink-soft">Caçamba</span>
               <span className="font-head font-extrabold text-charcoal leading-none">{CACAMBA_M3}</span>
               <span className="mt-0.5 text-2xs text-ink-soft">pronta pra obra</span>
             </div>
-            <div className="absolute -bottom-4 left-2 sm:left-5 flex items-center gap-2.5 rounded-card bg-cream px-3.5 py-2.5 shadow-lift ring-1 ring-line">
+            <div className="absolute -bottom-4 left-3 sm:left-5 flex items-center gap-2.5 rounded-card bg-cream/95 backdrop-blur px-3.5 py-2.5 shadow-lift ring-1 ring-line">
               <span className="grid place-items-center w-8 h-8 rounded-full bg-wa/15 text-wa animate-pulse-ring">
                 <MessageCircle size={16} strokeWidth={2.6} />
               </span>
@@ -476,16 +495,22 @@ const DIFERENCIAIS = [
 
 function DiferenciaisRainha() {
   return (
-    <section className={`${SEC} bg-charcoal text-cream overflow-hidden`}>
-      <Container className="grid lg:grid-cols-[0.85fr_1.15fr] gap-8 lg:gap-14 items-center">
+    <section className="py-12 sm:py-14 lg:py-16 bg-charcoal text-cream overflow-hidden">
+      <Container className="grid lg:grid-cols-[0.46fr_0.54fr] gap-8 lg:gap-16 items-center">
+        {/* DIFERENCIAIS · foto editorial oficial (personagem + caçambas + operação).
+            /mascote/diferenciais-rainha.webp — imagem QUADRADA original, exclusiva desta
+            seção (não duplicar em outro lugar). Sem fade/máscara: card com cantos
+            arredondados, borda dourada bem discreta e sombra suave — o cenário (caçambas,
+            máquinas, resíduos separados) fica visível de propósito. */}
         <Reveal className="order-2 lg:order-1">
-          <div className="h-[300px] sm:h-[360px] lg:h-[420px] flex items-end justify-center">
+          <div className="relative mx-auto max-w-[420px] lg:max-w-none">
+            <div className="absolute -inset-3 rounded-[1.75rem] bg-gold/[0.07] blur-2xl" aria-hidden />
             <img
-              src="/mascote/rainha-3q.webp"
-              alt="A Rainha do Entulho"
-              width="458" height="1100"
+              src="/mascote/diferenciais-rainha.webp"
+              alt="A Rainha do Entulho no pátio de triagem, com caçambas e máquinas da operação — deixa que a Rainha resolve"
+              width="1024" height="1024"
               loading="lazy" decoding="async"
-              className="h-full w-auto object-contain drop-shadow-2xl select-none pointer-events-none"
+              className="relative w-full aspect-square object-cover object-[50%_20%] rounded-xl2 ring-1 ring-gold-light/20 shadow-[0_20px_45px_-18px_rgba(0,0,0,0.55)] select-none"
             />
           </div>
         </Reveal>
@@ -581,29 +606,54 @@ function FrotaAtende() {
 
 function CtaWhatsapp() {
   return (
-    <section id="contato" className="relative overflow-hidden bg-red text-cream">
-      <div className="absolute -right-24 -top-24 w-80 h-80 rounded-full bg-gold/20 blur-2xl" aria-hidden />
-      <Container className="relative grid lg:grid-cols-[1.25fr_0.75fr] gap-6 items-center py-12 sm:py-16">
-        <Reveal>
-          <h2 className="font-display uppercase leading-[0.95] text-4xl sm:text-5xl lg:text-[3.3rem]">
-            Precisou de caçamba?<br /><span className="text-gold-light">Chama a Rainha.</span>
-          </h2>
-          <p className="mt-3 max-w-md text-cream/85">Resposta rápida, preço combinado antes e entrega com hora marcada em Uruaçu.</p>
-          <div className="mt-6 flex flex-wrap items-center gap-4">
-            <Button href={WA_CACAMBA} variant="primary" size="lg" icon={MessageCircle} iconRight={false}>Pedir pelo WhatsApp</Button>
-            <a href={`tel:+${WHATSAPP_NUMBER}`} className="font-head font-bold text-cream/90 hover:text-cream tabular-nums">{WHATSAPP_DISPLAY}</a>
-          </div>
-        </Reveal>
-        <Reveal delay={120} className="hidden lg:block">
-          <div className="h-[220px] lg:h-[260px] flex items-end justify-end">
-            <img
-              src="/mascote/rainha-bust.webp"
-              alt=""
-              width="832" height="700"
-              loading="lazy" decoding="async"
-              className="h-full w-auto object-contain drop-shadow-2xl select-none pointer-events-none"
-            />
-          </div>
+    <section id="contato" className="relative overflow-hidden text-cream">
+      {/* fundo profundo: vermelho → vinho → escuro, com vinheta atrás da personagem */}
+      <div className="absolute inset-0 bg-[linear-gradient(105deg,#8B1226_0%,#B51731_40%,#8B1226_68%,#5E0F1D_100%)]" aria-hidden />
+      <div className="absolute inset-0 bg-[radial-gradient(78%_120%_at_84%_72%,rgba(0,0,0,0.52),transparent_58%)]" aria-hidden />
+      <div className="absolute right-[6%] top-1/2 -translate-y-1/2 h-72 w-72 rounded-full bg-gold/12 blur-[80px]" aria-hidden />
+      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#5E0F1D] to-transparent" aria-hidden />
+
+      <Container className="relative grid lg:grid-cols-[1.3fr_0.7fr] gap-4 lg:gap-8 items-stretch">
+        <div className="py-10 sm:py-12 lg:py-14">
+          <Reveal>
+            <h2 className="font-display uppercase leading-[0.9] text-[2.2rem] sm:text-5xl lg:text-[3.4rem]">
+              Precisou de caçamba?
+              <span className="mt-1 block text-gold-light">Chama a Rainha.</span>
+            </h2>
+            <p className="mt-3.5 max-w-md text-[0.95rem] leading-relaxed text-cream/80">
+              Resposta rápida, preço combinado antes e entrega com hora marcada em Uruaçu.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <Button
+                href={WA_CACAMBA} variant="primary" size="lg" icon={MessageCircle} iconRight={false}
+                className="ring-1 ring-gold-light/40 shadow-[0_12px_34px_-10px_rgba(0,0,0,0.55)]"
+              >
+                Pedir pelo WhatsApp
+              </Button>
+              <a
+                href={`tel:+${WHATSAPP_NUMBER}`}
+                className="inline-flex items-center gap-2 font-head font-bold text-base sm:text-lg tabular-nums text-cream hover:text-gold-light transition-colors"
+              >
+                <Phone size={16} strokeWidth={2.6} className="text-gold-light" aria-hidden />
+                {WHATSAPP_DISPLAY}
+              </a>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* CTA · imagem fornecida pelo cliente (retrato). /mascote/rainha-cta-foto.webp —
+            enquadrada em coroa + rosto + ombros; a faixa "RAINHA DO BRASIL" original foi
+            cortada de fora (texto errado pra esse site). Sem moldura: máscara radial funde
+            a imagem no vermelho/vinho da seção. rainha-whatsapp.webp fica como spare oficial. */}
+        <Reveal delay={120} className="relative min-h-[220px] sm:min-h-[260px] lg:min-h-0 lg:self-stretch">
+          <div className="absolute inset-x-0 bottom-0 top-4 bg-[radial-gradient(closest-side,rgba(193,154,107,0.18),transparent_75%)]" aria-hidden />
+          <img
+            src="/mascote/rainha-cta-foto.webp"
+            alt="A Rainha do Entulho — atendimento pelo WhatsApp"
+            width="819" height="578"
+            loading="lazy" decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-[50%_15%] select-none pointer-events-none [-webkit-mask-image:radial-gradient(54%_70%_at_50%_36%,#000_66%,transparent_98%)] [mask-image:radial-gradient(54%_70%_at_50%_36%,#000_66%,transparent_98%)]"
+          />
         </Reveal>
       </Container>
     </section>
