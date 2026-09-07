@@ -27,36 +27,35 @@ export default function Terms() {
 
         <div className="space-y-8 font-body text-[15px] leading-relaxed text-ink">
           <section>
-            <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">Sobre o serviço</h2>
+            <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">O serviço</h2>
             <p>
-              A Rainha do Entulho aluga container de 5m³ pra coleta de entulho e resíduos de obra em
-              Uruaçu-GO, dentro do perímetro urbano. Trabalhamos com locação semanal (R$220) e mensal
-              (R$750) — não trabalhamos com diária avulsa.
+              A Rainha do Entulho aluga caçamba de 5 m³ pra entulho e resíduo de obra em Uruaçu-GO,
+              dentro do perímetro urbano. O aluguel é por semana (R$ 220) ou por mês (R$ 750). Não
+              fazemos aluguel por diária.
             </p>
           </section>
 
           <section>
             <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">Entrega e retirada</h2>
             <p>
-              A entrega e a retirada do container são combinadas por WhatsApp, conforme disponibilidade.
-              O cliente é responsável por garantir acesso ao local combinado na data marcada.
+              A gente combina a entrega e a retirada da caçamba pelo WhatsApp, conforme a
+              disponibilidade. O cliente precisa garantir acesso ao local na data combinada.
             </p>
           </section>
 
           <section>
-            <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">O que pode ir no container</h2>
+            <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">O que pode ir na caçamba</h2>
             <p>
-              O container é destinado a entulho e resíduos de obra/reforma não perigosos. Materiais
-              perigosos, químicos ou proibidos por lei não devem ser descartados no container — combine
-              com a gente antes se tiver dúvida.
+              A caçamba é pra entulho e resíduo de obra ou reforma. Material perigoso, químico ou
+              proibido por lei não pode ir na caçamba — se tiver dúvida, fala com a gente antes.
             </p>
           </section>
 
           <section>
             <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">Pagamento</h2>
             <p>
-              O valor da locação é combinado no momento do pedido, conforme a modalidade escolhida
-              (semanal ou mensal). Formas de pagamento são combinadas diretamente com a equipe da Rainha do Entulho.
+              O valor é combinado na hora do pedido, conforme o plano escolhido (semana ou mês). A
+              forma de pagamento você acerta direto com a Rainha do Entulho.
             </p>
           </section>
 

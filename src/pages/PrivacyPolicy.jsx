@@ -29,27 +29,27 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">O que a gente coleta</h2>
             <p>
-              Quando você preenche o formulário de contato ou chama a gente no WhatsApp, coletamos nome,
-              telefone/WhatsApp, e-mail (se você informar), endereço ou bairro, e a mensagem ou fotos que
-              você enviar sobre o serviço que precisa.
+              Quando você chama a gente no WhatsApp, ficam salvos o seu nome, o telefone, o e-mail
+              (se você mandar), o endereço ou bairro da obra, e as mensagens e fotos que você enviar
+              sobre o que precisa.
             </p>
           </section>
 
           <section>
-            <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">Pra que usamos</h2>
+            <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">Pra que a gente usa</h2>
             <p>
-              Usamos esses dados só pra combinar a entrega e a retirada do seu container — data, endereço,
-              modalidade (semanal ou mensal) e valor. Não vendemos nem compartilhamos seus dados com
-              terceiros pra fins de marketing.
+              A gente usa esses dados só pra combinar a entrega e a retirada da caçamba: data,
+              endereço, plano (semana ou mês) e valor. A gente não vende nem passa seus dados pra
+              outras empresas.
             </p>
           </section>
 
           <section>
-            <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">Como guardamos</h2>
+            <h2 className="font-head font-extrabold text-charcoal text-xl mb-2">Por quanto tempo</h2>
             <p>
-              Suas informações ficam guardadas só o tempo necessário pra atender você e cumprir obrigações
-              legais (como emissão de nota, se aplicável). Você pode pedir a exclusão dos seus dados a
-              qualquer momento chamando no WhatsApp.
+              A gente guarda seus dados só pelo tempo necessário pra atender você e cumprir
+              obrigação legal (nota fiscal, por exemplo). Você pode pedir pra apagar seus dados a
+              qualquer hora, pelo WhatsApp.
             </p>
           </section>
 

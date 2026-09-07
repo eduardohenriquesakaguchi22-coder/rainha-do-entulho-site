@@ -19,8 +19,8 @@ import {
    Cada foto é usada UMA vez. Gale­ria de obras entra quando o cliente
    enviar fotos reais (marcador abaixo, antes do FAQ).
    MASCOTE (recortes com alpha)
-     /mascote/rainha-apontando.webp   → HERO (apresenta o equipamento)
-     /mascote/rainha-whatsapp.webp    → COMO FUNCIONA (fale com a Rainha)
+     /mascote/rainha-apontando.webp   → HERO (ao lado da caçamba)
+     /mascote/rainha-whatsapp.webp    → COMO FUNCIONA (atende pelo WhatsApp)
      /mascote/rainha-apresentando.webp→ CTA FINAL (convite)
    ================================================================ */
 
@@ -42,16 +42,16 @@ const PRECO_MENSAL = 'R$ 750 / mês'
    mercado, lista fechada do que não pode ir na caçamba, fotos de obras. */
 
 const wa = (msg) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`
-const WA_GERAL = wa('Oi! Vim pelo site da Rainha do Entulho e quero saber mais.')
-const WA_CACAMBA = wa('Oi! Vim pelo site e quero pedir uma caçamba. Pode me passar preço e data?')
-const WA_ORCAMENTO = wa('Oi! Vim pelo site e quero um orçamento de caçamba. Vou passar o endereço e o tipo de material.')
-const WA_REGIAO = wa('Oi! Vim pelo site. Vocês atendem a minha região? Vou mandar a localização.')
+const WA_GERAL = wa('Oi! Vim pelo site e queria falar sobre aluguel de caçamba.')
+const WA_CACAMBA = wa('Oi! Vim pelo site e quero alugar uma caçamba. Pode me passar o preço e a data?')
+const WA_ORCAMENTO = wa('Oi! Vim pelo site e quero um orçamento. Já mando o endereço da obra e o que vou descartar.')
+const WA_REGIAO = wa('Oi! Vim pelo site. Vocês entregam no meu endereço? Já mando a localização.')
 
 const NAV_LINKS = [
   { label: 'Serviços', href: '#servicos' },
   { label: 'A caçamba', href: '#cacamba' },
   { label: 'Como funciona', href: '#como-funciona' },
-  { label: 'Por que a Rainha', href: '#porque' },
+  { label: 'A empresa', href: '#porque' },
   { label: 'Contato', href: '#contato' },
 ]
 
@@ -256,30 +256,30 @@ function Hero() {
       <Container className="grid lg:grid-cols-[1.02fr_0.98fr] gap-10 lg:gap-14 items-center py-14 sm:py-20 lg:py-24">
         {/* Coluna texto */}
         <div className="max-w-xl">
-          <Reveal><Kicker>Locação de caçambas · {REGIAO}</Kicker></Reveal>
+          <Reveal><Kicker>Caçamba de entulho · {REGIAO}</Kicker></Reveal>
           <Reveal delay={60}>
             <h1 className="mt-5 font-display uppercase text-charcoal leading-[0.94] text-[2.6rem] sm:text-[3.6rem] lg:text-[4.1rem]">
-              Caçamba certa,<br />no lugar certo,<br /><span className="text-red">na hora combinada.</span>
+              Caçamba de entulho<br />pra sua obra<br /><span className="text-red">em Uruaçu.</span>
             </h1>
           </Reveal>
           <Reveal delay={120}>
             <p className="mt-6 max-w-prose2 text-[1.02rem] leading-relaxed text-ink-soft">
-              Locação de caçamba de entulho de {CACAMBA_M3} em Uruaçu-GO. Semanal ou mensal,
-              com entrega e retirada agendadas — e preço fechado antes, direto no WhatsApp.
+              A gente aluga caçamba de {CACAMBA_M3} por semana ou por mês. Leva até a obra,
+              busca quando você terminar, e passa o preço antes no WhatsApp.
             </p>
           </Reveal>
           <Reveal delay={180}>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button href={WA_CACAMBA} variant="primary" size="lg">Pedir uma caçamba</Button>
-              <Button href="#servicos" variant="outline" size="lg" icon={ArrowRight}>Ver serviços</Button>
+              <Button href="#como-funciona" variant="outline" size="lg" icon={ArrowRight}>Ver como funciona</Button>
             </div>
           </Reveal>
           <Reveal delay={240}>
             <dl className="mt-10 grid grid-cols-3 gap-px bg-line border-y border-line">
               {[
-                ['Capacidade', CACAMBA_M3],
-                ['Planos', 'Semanal · mensal'],
-                ['Operação', 'Própria'],
+                ['Tamanho', CACAMBA_M3],
+                ['Aluguel', 'Semana ou mês'],
+                ['Atende', 'Uruaçu-GO'],
               ].map(([k, v]) => (
                 <div key={k} className="bg-cream px-1 py-3">
                   <dt className="font-head text-[0.62rem] font-bold uppercase tracking-[0.14em] text-ink-soft">{k}</dt>
@@ -298,15 +298,15 @@ function Hero() {
               <source srcSet="/mascote/cacamba-real.webp" type="image/webp" />
               <img
                 src="/mascote/cacamba-real.jpg"
-                alt="Caçamba de 5 m³ da Rainha do Entulho posicionada na rua, em Uruaçu-GO"
+                alt="Caçamba de 5 m³ da Rainha do Entulho na rua, em Uruaçu-GO"
                 width="1200" height="960"
                 fetchPriority="high" decoding="async"
                 className="w-full aspect-[5/4] object-cover"
               />
             </picture>
             <div className="absolute right-0 bottom-0 bg-charcoal text-cream px-4 py-2.5 text-right">
-              <span className="block font-head text-[0.56rem] font-bold uppercase tracking-[0.16em] text-gold-light">Frota própria</span>
-              <span className="block font-head font-extrabold text-[0.82rem] leading-tight">Caçamba de {CACAMBA_M3}</span>
+              <span className="block font-head text-[0.56rem] font-bold uppercase tracking-[0.16em] text-gold-light">Nossa caçamba</span>
+              <span className="block font-head font-extrabold text-[0.82rem] leading-tight">{CACAMBA_M3} · Uruaçu-GO</span>
             </div>
           </div>
           {/* Mascote apresentando o equipamento — ao lado da foto, pés na mesma base, não flutua */}
@@ -314,7 +314,7 @@ function Hero() {
             <div className="absolute inset-x-1 -bottom-1 h-3 rounded-[50%] bg-charcoal/25 blur-md" aria-hidden />
             <img
               src="/mascote/rainha-apontando.webp"
-              alt="A Rainha do Entulho, mascote da marca, apresentando a caçamba"
+              alt="A Rainha do Entulho, a mascote da empresa, ao lado da caçamba"
               width="364" height="688"
               loading="lazy" decoding="async"
               className="relative w-full h-auto object-contain drop-shadow-[0_16px_22px_rgba(0,0,0,0.26)]"
@@ -331,10 +331,10 @@ function Hero() {
    ================================================================ */
 
 const TRUST = [
-  ['01', 'Negócio de família', 'Você fala direto com quem opera'],
-  ['02', `Caçamba de ${CACAMBA_M3}`, 'Um tamanho, feito pra entulho pesado'],
-  ['03', 'Semanal ou mensal', 'Você escolhe o prazo'],
-  ['04', 'Preço fechado antes', 'Sem multa escondida, tudo no WhatsApp'],
+  ['01', 'Negócio de família', 'Você fala com quem trabalha aqui'],
+  ['02', `Caçamba de ${CACAMBA_M3}`, 'Dá pra obra, reforma e limpeza pesada'],
+  ['03', 'Semana ou mês', 'Você escolhe quanto tempo fica com ela'],
+  ['04', 'Preço combinado antes', 'Você sabe quanto vai pagar antes de fechar'],
 ]
 
 const TRUST_BORDERS = [
@@ -428,19 +428,19 @@ function Servicos() {
         <Reveal className="max-w-2xl">
           <Kicker>O que a gente faz</Kicker>
           <h2 className="mt-4 font-display uppercase text-charcoal leading-[0.98] text-[2.3rem] sm:text-[3rem]">
-            Soluções pra tirar o entulho do caminho
+            Aluguel de caçamba e retirada de entulho
           </h2>
           <p className="mt-4 text-[1rem] leading-relaxed text-ink-soft">
-            Um tamanho de caçamba, {CACAMBA_M3}, feito pra material pesado de obra. O que muda é o
-            prazo e a forma de atender.
+            A caçamba é uma só, de {CACAMBA_M3}. O que muda é quanto tempo você fica com ela
+            e o que você precisa que a gente faça.
           </p>
         </Reveal>
 
         <div className="mt-14 lg:mt-16 space-y-16 lg:space-y-20">
           <ServiceRow
             n="01"
-            title="Locação de caçamba 5 m³"
-            text="Semanal ou mensal, entregue no seu endereço em Uruaçu. Pra reforma, obra nova, demolição ou limpeza pesada de quintal."
+            title="Aluguel de caçamba"
+            text="A gente leva a caçamba de 5 m³ até você e busca no fim do prazo. Serve pra reforma, obra, demolição ou aquela limpeza de quintal que junta muito entulho."
             spec={[PRECO_SEMANAL, PRECO_MENSAL]}
             cta="Pedir no WhatsApp"
             href={WA_CACAMBA}
@@ -449,21 +449,21 @@ function Servicos() {
           <ServiceRow
             n="02"
             title="Retirada de entulho"
-            text="A gente separa, carrega e leva o material pro destino certo. Obra, reforma, demolição e limpeza de terreno — sem acúmulo na frente da sua casa."
-            spec={['Material de obra', 'Destino certo', 'Sem acúmulo']}
+            text="Encheu a caçamba? A gente busca, tira o material da frente e leva pro lugar certo. Vale pra obra, reforma, demolição e limpeza de terreno."
+            spec={['Obra e reforma', 'Demolição', 'Limpeza de terreno']}
             cta="Falar com a gente"
             href={WA_GERAL}
             image="/mascote/diferenciais-rainha.jpg"
-            imageAlt="Pátio de triagem da Rainha do Entulho, com caçambas e material separado"
+            imageAlt="Caçambas e material separado no pátio da Rainha do Entulho"
             reverse
           />
 
           <ServiceRow
             n="03"
-            title="Coleta e transporte"
-            text="Encheu, avisou: a gente busca a caçamba cheia no caminhão poliguindaste e devolve vazia pra você seguir a obra."
-            spec={['Poliguindaste próprio', 'Não é intermediação']}
-            cta="Combinar coleta"
+            title="Troca de caçamba"
+            text="Se a obra é longa e a caçamba enche antes do prazo, a gente vem, tira a cheia e deixa uma vazia no lugar. Você não para a obra."
+            spec={['Caminhão é nosso', 'Sem intermediário']}
+            cta="Combinar a troca"
             href={WA_GERAL}
           />
         </div>
@@ -477,12 +477,12 @@ function Servicos() {
    ================================================================ */
 
 const SPECS = [
-  ['Capacidade', CACAMBA_M3],
-  ['Tipo', 'Caçamba estacionária (poliguindaste)'],
-  ['Indicada para', 'Reforma · obra · demolição · limpeza'],
-  ['Planos', `${PRECO_SEMANAL}  ·  ${PRECO_MENSAL}`],
-  ['Entrega e retirada', 'Agendadas, hora combinada'],
-  ['Atendimento', REGIAO],
+  ['Tamanho', CACAMBA_M3],
+  ['Tipo', 'Caçamba de entulho, de metal'],
+  ['Serve pra', 'Reforma, obra, demolição e limpeza'],
+  ['Aluguel', `${PRECO_SEMANAL}  ou  ${PRECO_MENSAL}`],
+  ['Entrega e retirada', 'A gente combina o dia e a hora com você'],
+  ['Onde a gente atende', REGIAO],
 ]
 
 function Cacamba() {
@@ -495,7 +495,7 @@ function Cacamba() {
             <source srcSet="/mascote/hero-operacao.webp" type="image/webp" />
             <img
               src="/mascote/hero-operacao.jpg"
-              alt="A caçamba da Rainha do Entulho carregada no caminhão poliguindaste, em Uruaçu-GO"
+              alt="Caçamba da Rainha do Entulho no caminhão, em Uruaçu-GO"
               width="1024" height="1024"
               loading="lazy" decoding="async"
               className="absolute inset-0 w-full h-full object-cover object-[52%_18%]"
@@ -505,13 +505,13 @@ function Cacamba() {
 
         {/* Especificações */}
         <Reveal delay={80} className="px-5 sm:px-10 lg:px-16 py-16 lg:py-20">
-          <Kicker light>O equipamento</Kicker>
+          <Kicker light>A caçamba</Kicker>
           <h2 className="mt-4 font-display uppercase leading-[0.98] text-[2.2rem] sm:text-[2.8rem]">
-            Uma caçamba, feita pra aguentar obra
+            Como é a caçamba
           </h2>
           <p className="mt-4 max-w-md text-[0.98rem] leading-relaxed text-cream/70">
-            Chapa reforçada, {CACAMBA_M3} de capacidade e caminhão poliguindaste da própria empresa
-            rodando Uruaçu. Operação própria — você não fala com intermediário.
+            É a caçamba de metal de sempre, de {CACAMBA_M3}. Quem leva e busca é a gente, no nosso
+            caminhão. Você não passa por intermediário.
           </p>
 
           <dl className="mt-9 divide-y divide-white/10 border-y border-white/10">
@@ -524,8 +524,8 @@ function Cacamba() {
           </dl>
 
           <div className="mt-9 flex flex-wrap gap-3">
-            <Button href={WA_CACAMBA} variant="gold" size="lg">Pedir esta caçamba</Button>
-            <Button href={WA_REGIAO} variant="outline-light" size="lg" icon={MapPin} iconRight={false}>Consultar região</Button>
+            <Button href={WA_CACAMBA} variant="gold" size="lg">Pedir a caçamba</Button>
+            <Button href={WA_REGIAO} variant="outline-light" size="lg" icon={MapPin} iconRight={false}>Ver se atende meu endereço</Button>
           </div>
         </Reveal>
       </div>
@@ -538,10 +538,10 @@ function Cacamba() {
    ================================================================ */
 
 const STEPS = [
-  ['01', 'Fale com a Rainha', 'Chama no WhatsApp com o endereço e o tipo de material.'],
-  ['02', 'Combina preço e data', 'A gente fecha o valor e a data de entrega na hora.'],
-  ['03', 'A gente entrega', 'Caçamba na porta, no dia e hora combinados.'],
-  ['04', 'A gente retira', 'Encheu ou acabou o prazo, você avisa e a gente busca.'],
+  ['01', 'Chama no WhatsApp', 'Fala onde é a obra e o que você vai jogar fora.'],
+  ['02', 'A gente combina tudo', 'Passa o preço e o dia da entrega na hora.'],
+  ['03', 'A caçamba chega', 'A gente leva até o local no dia combinado.'],
+  ['04', 'Depois a gente busca', 'Encheu ou acabou o prazo? Você avisa e a gente tira.'],
 ]
 
 function ComoFunciona() {
@@ -551,10 +551,11 @@ function ComoFunciona() {
         <Reveal className="max-w-2xl">
           <Kicker>Como funciona</Kicker>
           <h2 className="mt-4 font-display uppercase text-charcoal leading-[0.98] text-[2.3rem] sm:text-[3rem]">
-            Do WhatsApp à retirada, em 4 passos
+            Como pedir a caçamba
           </h2>
           <p className="mt-4 text-[1rem] leading-relaxed text-ink-soft">
-            Sem visita técnica, sem proposta demorada. Uma conversa e a caçamba está na sua obra.
+            Não tem visita técnica nem proposta demorada. Você chama no WhatsApp e a gente
+            resolve por lá.
           </p>
         </Reveal>
 
@@ -564,7 +565,7 @@ function ComoFunciona() {
             <div className="absolute inset-x-3 -bottom-1 h-3 rounded-[50%] bg-charcoal/20 blur-md" aria-hidden />
             <img
               src="/mascote/rainha-whatsapp.webp"
-              alt="A Rainha do Entulho com o celular, pronta pra atender no WhatsApp"
+              alt="A Rainha do Entulho no celular, atendendo pelo WhatsApp"
               width="210" height="422"
               loading="lazy" decoding="async"
               className="relative w-full h-auto object-contain drop-shadow-[0_14px_20px_rgba(0,0,0,0.2)]"
@@ -594,10 +595,10 @@ function ComoFunciona() {
    ================================================================ */
 
 const DIFERENCIAIS = [
-  ['Negócio de família', 'Você fala direto com quem opera a caçamba. Sem central, sem intermediário no meio.'],
-  ['Preço combinado antes', 'O valor é fechado no WhatsApp, antes da caçamba sair. Sem surpresa na fatura.'],
-  ['No seu prazo', 'Semanal ou mensal — e a retirada acontece quando você avisa que encheu.'],
-  ['Operação própria', 'Caçamba e caminhão poliguindaste são da empresa. Não é intermediação de terceiro.'],
+  ['Negócio de família', 'Você fala com quem trabalha na empresa, não com atendente de central.'],
+  ['O preço a gente combina antes', 'Você sabe quanto vai pagar no WhatsApp, antes da caçamba chegar.'],
+  ['Você escolhe o prazo', 'Fica com a caçamba por uma semana ou por um mês. A retirada é quando você avisar.'],
+  ['A caçamba e o caminhão são nossos', 'A gente não repassa pra terceiro. Quem entrega e busca é a Rainha do Entulho.'],
 ]
 
 function PorQue() {
@@ -606,20 +607,21 @@ function PorQue() {
       <Container className="py-20 sm:py-24 lg:py-28">
         <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
           <Reveal>
-            <Kicker light>Por que a Rainha</Kicker>
+            <Kicker light>A empresa</Kicker>
             <h2 className="mt-4 font-display uppercase leading-[0.96] text-[2.3rem] sm:text-[3rem]">
-              Deixa que a<br />Rainha resolve
+              Quem é a<br />Rainha do Entulho
             </h2>
             <p className="mt-5 max-w-xs text-[0.95rem] leading-relaxed text-cream/60">
-              CNPJ {CNPJ} · Uruaçu-GO. Empresa registrada, frota própria e atendimento direto.
+              É uma empresa de Uruaçu, registrada (CNPJ {CNPJ}). A caçamba e o caminhão são
+              nossos, e quem atende é a própria família.
             </p>
           </Reveal>
 
           <Reveal delay={80}>
             <dl className="divide-y divide-white/10 border-y border-white/10">
               {DIFERENCIAIS.map(([title, text]) => (
-                <div key={title} className="py-6 grid sm:grid-cols-[13rem_1fr] gap-2 sm:gap-6">
-                  <dt className="font-display uppercase text-[1.15rem] text-gold-light leading-tight">{title}</dt>
+                <div key={title} className="py-6 grid sm:grid-cols-[16rem_1fr] gap-2 sm:gap-6">
+                  <dt className="font-display uppercase text-[1.1rem] text-gold-light leading-tight">{title}</dt>
                   <dd className="text-[0.95rem] leading-relaxed text-cream/70">{text}</dd>
                 </div>
               ))}
@@ -644,20 +646,20 @@ function PorQue() {
 
 const FAQS = [
   {
-    q: 'Como funciona a locação?',
-    a: `Você contrata a caçamba de ${CACAMBA_M3} por 7 dias (semanal) ou 30 dias (mensal). A gente entrega no endereço combinado em Uruaçu e retira no fim do prazo — ou antes, se você avisar que encheu.`,
+    q: 'Como funciona o aluguel?',
+    a: `Você aluga a caçamba de ${CACAMBA_M3} por 7 dias ou por 30 dias. A gente entrega no endereço em Uruaçu e busca no fim do prazo. Se encher antes, é só avisar que a gente tira.`,
   },
   {
     q: 'Como peço uma caçamba?',
-    a: `Chama no WhatsApp ${WHATSAPP_DISPLAY} com o endereço e o tipo de material. A gente combina preço e data de entrega na hora.`,
+    a: `Manda mensagem no WhatsApp ${WHATSAPP_DISPLAY} com o endereço da obra e o que você vai descartar. A gente responde com o preço e a data.`,
   },
   {
     q: 'Quanto custa?',
-    a: `${PRECO_SEMANAL} no plano semanal, ${PRECO_MENSAL} no mensal. O valor é confirmado no WhatsApp antes da entrega. Não trabalhamos com diária avulsa.`,
+    a: `${PRECO_SEMANAL} ou ${PRECO_MENSAL}. A gente confirma o valor no WhatsApp antes de entregar. Não fazemos aluguel por diária.`,
   },
   {
-    q: 'Quais regiões vocês atendem?',
-    a: 'Uruaçu-GO e região, com base no perímetro urbano. Não sabe se a gente chega até você? Manda a localização no WhatsApp que a gente confirma.',
+    q: 'Vocês entregam no meu endereço?',
+    a: 'A gente atende Uruaçu e a região. Se não tiver certeza que chega até você, manda a localização no WhatsApp que a gente confirma.',
   },
 ]
 
@@ -701,9 +703,9 @@ function FAQ() {
             Perguntas<br />frequentes
           </h2>
           <p className="mt-4 text-[0.92rem] text-ink-soft">
-            Não achou sua dúvida?{' '}
+            Ficou com outra dúvida?{' '}
             <a href={WA_GERAL} target="_blank" rel="noopener noreferrer" className="font-semibold text-red underline underline-offset-2 hover:text-red-dark">
-              Pergunta no WhatsApp.
+              Chama no WhatsApp.
             </a>
           </p>
         </Reveal>
@@ -736,7 +738,7 @@ function CtaFinal() {
               <span className="text-gold-light">Chama a Rainha.</span>
             </h2>
             <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-cream/85">
-              Resposta rápida, preço combinado antes e entrega com hora marcada em Uruaçu-GO.
+              Manda uma mensagem que a gente já passa o preço e combina a entrega.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               <Button href={WA_CACAMBA} variant="gold" size="lg" icon={MessageCircle} iconRight={false}>
@@ -759,7 +761,7 @@ function CtaFinal() {
             <div className="absolute inset-x-6 bottom-1 h-4 rounded-[50%] bg-black/25 blur-lg" aria-hidden />
             <img
               src="/mascote/rainha-apresentando.webp"
-              alt="A Rainha do Entulho convidando você a chamar no WhatsApp"
+              alt="A Rainha do Entulho chamando você pra falar no WhatsApp"
               width="308" height="436"
               loading="lazy" decoding="async"
               className="relative w-full h-auto object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.35)]"
@@ -782,7 +784,7 @@ function Footer() {
         <div>
           <Logo light />
           <p className="mt-4 max-w-xs text-[0.86rem] leading-relaxed">
-            Locação de caçamba de entulho de {CACAMBA_M3} em Uruaçu-GO. Frota própria, negócio de família.
+            Aluguel de caçamba de entulho de {CACAMBA_M3} em Uruaçu-GO. Negócio de família, caminhão próprio.
           </p>
         </div>
 
