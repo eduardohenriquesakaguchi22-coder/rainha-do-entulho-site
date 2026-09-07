@@ -11,8 +11,8 @@ export default {
     },
     container: {
       center: true,
-      padding: { DEFAULT: "1.25rem", sm: "2rem", lg: "2.5rem" },
-      screens: { xl: "1200px" },
+      padding: { DEFAULT: "1.25rem", sm: "2rem", lg: "3rem" },
+      screens: { xl: "1320px" },
     },
     extend: {
       colors: {
@@ -38,16 +38,17 @@ export default {
         "2xs": ["0.6875rem", { lineHeight: "1rem", letterSpacing: "0.14em" }],
       },
       borderRadius: {
-        card: "0.75rem",
-        xl2: "1.25rem",
+        // Industrial / editorial: cantos discretos, nada de "app"
+        card: "4px",
+        xl2: "6px",
       },
       maxWidth: {
-        prose2: "62ch",
+        prose2: "58ch",
       },
       boxShadow: {
-        soft: "0 1px 2px rgba(44,44,44,.06), 0 8px 24px -14px rgba(44,44,44,.20)",
-        card: "0 1px 2px rgba(44,44,44,.05), 0 12px 32px -18px rgba(44,44,44,.28)",
-        lift: "0 8px 20px -6px rgba(44,44,44,.22)",
+        soft: "0 1px 2px rgba(44,44,44,.05), 0 10px 24px -18px rgba(44,44,44,.22)",
+        card: "0 1px 2px rgba(44,44,44,.05), 0 14px 34px -22px rgba(44,44,44,.28)",
+        lift: "0 10px 22px -12px rgba(44,44,44,.30)",
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.25,0.46,0.45,0.94)",

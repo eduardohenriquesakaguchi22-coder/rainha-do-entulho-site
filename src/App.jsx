@@ -1,30 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Truck, Recycle, HardHat, MessageCircle, Phone, MapPin, Clock,
-  CalendarRange, Tag, ArrowRight, Check, ChevronDown, Menu, X, Instagram,
+  MessageCircle, Phone, MapPin, ArrowRight, ArrowUpRight, Check,
+  ChevronDown, Menu, X, Instagram,
 } from 'lucide-react'
 
 /* ================================================================
-   RAINHA DO ENTULHO — Homepage
-   Identidade v2.0 "Realeza Industrial".
-   Regra: só dados reais confirmados. Nada de placeholder visível.
-   O que não foi confirmado fica FORA da tela (comentado abaixo).
-   ================================================================ */
-
-/* ================================================================
-   USO DA PERSONAGEM — regra de assets (não repetir a mesma pose)
-   Cada aparição da Rainha tem pose + função própria:
-     HERO          → /mascote/hero-operacao.webp       (cena real: Rainha + caminhão + caçamba)
-     DIFERENCIAIS  → /mascote/diferenciais-rainha.webp (foto editorial: Rainha + pátio/caçambas)
-     CTA WHATSAPP  → /mascote/rainha-cta-foto.webp     (retrato fornecido pelo cliente)
-   Spares prontos: /mascote/rainha-hero.webp, /mascote/rainha-apontando.webp,
-   /mascote/rainha-apresentando.webp, /mascote/rainha-whatsapp.webp (3D oficial, smartphone).
-   Assets antigos rainha-3q / rainha-bust foram aposentados (mesma pose frontal 3x).
-
-   Universo da marca (objetos 3D isolados, recortados da folha de refs):
-     obj-tijolos, obj-ferramentas, obj-capacete, obj-cone, obj-planta, obj-coroa
-   Fotografia real: cacamba-real (Frota). Cena/ambiente: rainha-patio.
+   RAINHA DO ENTULHO — Homepage (redesign v3 "Editorial Industrial")
+   Referência de hierarquia/composição: catálogos de equipamento pesado.
+   Identidade 100% Rainha do Entulho. Só dados reais confirmados.
+   A mascote é o único elemento 3D/digital — proposital, aparece em
+   3 momentos: HERO, COMO FUNCIONA e CTA FINAL.
+   ----------------------------------------------------------------
+   FOTOS
+     /mascote/cacamba-real.webp      → foto REAL da caçamba (Hero)
+     /mascote/hero-operacao.webp     → cena Rainha + caminhão (seção A CAÇAMBA)
+     /mascote/diferenciais-rainha.webp → cena pátio de triagem (Serviços · retirada)
+   Cada foto é usada UMA vez. Gale­ria de obras entra quando o cliente
+   enviar fotos reais (marcador abaixo, antes do FAQ).
+   MASCOTE (recortes com alpha)
+     /mascote/rainha-apontando.webp   → HERO (apresenta o equipamento)
+     /mascote/rainha-whatsapp.webp    → COMO FUNCIONA (fale com a Rainha)
+     /mascote/rainha-apresentando.webp→ CTA FINAL (convite)
    ================================================================ */
 
 /* ---------- Dados reais confirmados ---------- */
@@ -36,55 +33,58 @@ const REGIAO = 'Uruaçu-GO e região'
 const CNPJ = '33.012.627/0001-11'
 const CACAMBA_M3 = '5 m³'
 /* Preços já divulgados publicamente pela empresa — revisar antes de campanha. */
-const PRECO_CURTO = 'R$ 220/sem · R$ 750/mês'
+const PRECO_SEMANAL = 'R$ 220 / semana'
+const PRECO_MENSAL = 'R$ 750 / mês'
 
-/* NÃO confirmados — não entram no site até o cliente passar:
-   bairros atendidos, embed do mapa, depoimentos/nota Google,
-   horário de atendimento, nº de caçambas/caminhões da frota,
-   "anos de mercado", lista exata do que não pode ir na caçamba. */
+/* NÃO confirmados — ficam FORA do site até o cliente passar:
+   bairros exatos atendidos, embed de mapa, depoimentos/nota do Google,
+   horário de atendimento, nº de caçambas/caminhões da frota, anos de
+   mercado, lista fechada do que não pode ir na caçamba, fotos de obras. */
 
 const wa = (msg) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`
 const WA_GERAL = wa('Oi! Vim pelo site da Rainha do Entulho e quero saber mais.')
 const WA_CACAMBA = wa('Oi! Vim pelo site e quero pedir uma caçamba. Pode me passar preço e data?')
+const WA_ORCAMENTO = wa('Oi! Vim pelo site e quero um orçamento de caçamba. Vou passar o endereço e o tipo de material.')
 const WA_REGIAO = wa('Oi! Vim pelo site. Vocês atendem a minha região? Vou mandar a localização.')
 
 const NAV_LINKS = [
-  { label: 'Início', href: '#inicio' },
   { label: 'Serviços', href: '#servicos' },
-  { label: 'Como Funciona', href: '#como-funciona' },
-  { label: 'Atendimento', href: '#atende' },
+  { label: 'A caçamba', href: '#cacamba' },
+  { label: 'Como funciona', href: '#como-funciona' },
+  { label: 'Por que a Rainha', href: '#porque' },
   { label: 'Contato', href: '#contato' },
 ]
 
 /* ================================================================
-   DESIGN SYSTEM
+   PRIMITIVOS
    ================================================================ */
 
-const SEC = 'py-16 sm:py-20'
-const SEC_TIGHT = 'py-12 sm:py-16'
-
-function Container({ className = '', children }) {
-  return <div className={`mx-auto w-full max-w-[1200px] px-5 sm:px-8 ${className}`}>{children}</div>
+function Container({ className = '', children, as: Tag = 'div' }) {
+  return <Tag className={`mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12 ${className}`}>{children}</Tag>
 }
 
 const BTN_BASE =
-  'inline-flex items-center justify-center gap-2 font-head font-bold rounded-card transition-all duration-200 ease-smooth lift disabled:opacity-60 disabled:pointer-events-none'
-const BTN_SIZE = { sm: 'px-4 py-2.5 text-[0.82rem]', md: 'px-5 py-3 text-sm', lg: 'px-6 py-3.5 text-[0.95rem]' }
+  'group inline-flex items-center justify-center gap-2 font-head font-bold uppercase tracking-[0.04em] rounded-[3px] transition-all duration-200 ease-smooth lift disabled:opacity-60 disabled:pointer-events-none'
+const BTN_SIZE = {
+  sm: 'px-4 py-2.5 text-[0.72rem]',
+  md: 'px-5 py-3 text-[0.78rem]',
+  lg: 'px-7 py-4 text-[0.82rem]',
+}
 const BTN_VARIANT = {
-  primary: 'bg-gold text-charcoal hover:bg-gold-light shadow-soft',
-  solid: 'bg-red text-cream hover:bg-red-dark shadow-soft',
-  outline: 'border-2 border-charcoal/75 text-charcoal hover:bg-charcoal hover:text-cream',
-  'outline-light': 'border-2 border-cream/40 text-cream hover:bg-cream hover:text-charcoal',
-  wa: 'bg-wa text-white hover:brightness-95 shadow-soft',
+  primary: 'bg-red text-cream hover:bg-red-dark',
+  gold: 'bg-gold text-charcoal hover:bg-gold-light',
+  dark: 'bg-charcoal text-cream hover:bg-charcoal-soft',
+  outline: 'border border-charcoal/40 text-charcoal hover:border-charcoal hover:bg-charcoal hover:text-cream',
+  'outline-light': 'border border-cream/40 text-cream hover:bg-cream hover:text-charcoal',
 }
 
-function Button({ href, variant = 'primary', size = 'md', icon: Icon, iconRight = true, children, className = '', ...rest }) {
+function Button({ href, variant = 'primary', size = 'md', icon: Icon = ArrowRight, iconRight = true, children, className = '', ...rest }) {
   const cls = `${BTN_BASE} ${BTN_SIZE[size]} ${BTN_VARIANT[variant]} ${className}`
   const inner = (
     <>
-      {Icon && !iconRight && <Icon size={18} strokeWidth={2.5} aria-hidden />}
-      {children}
-      {Icon && iconRight && <Icon size={18} strokeWidth={2.5} aria-hidden />}
+      {Icon && !iconRight && <Icon size={16} strokeWidth={2.6} aria-hidden />}
+      <span>{children}</span>
+      {Icon && iconRight && <Icon size={16} strokeWidth={2.6} className="transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />}
     </>
   )
   if (href) {
@@ -98,24 +98,12 @@ function Button({ href, variant = 'primary', size = 'md', icon: Icon, iconRight 
   return <button className={cls} {...rest}>{inner}</button>
 }
 
-function Eyebrow({ children, className = '', center = false }) {
+function Kicker({ children, light = false, className = '' }) {
   return (
-    <span className={`inline-flex items-center gap-2 font-body text-2xs font-semibold uppercase tracking-[0.16em] text-gold-dark ${center ? 'justify-center' : ''} ${className}`}>
-      <span className="h-px w-6 bg-current opacity-60" aria-hidden />
+    <span className={`inline-flex items-center gap-3 font-head text-[0.7rem] font-bold uppercase tracking-[0.2em] ${light ? 'text-gold-light' : 'text-gold-dark'} ${className}`}>
+      <span className="h-px w-8 bg-current" aria-hidden />
       {children}
     </span>
-  )
-}
-
-function SectionTitle({ eyebrow, title, kicker, center = false, light = false, className = '' }) {
-  return (
-    <div className={`${center ? 'text-center mx-auto max-w-2xl' : 'max-w-2xl'} ${className}`}>
-      {eyebrow && <Eyebrow center={center} className={light ? 'text-gold-light' : ''}>{eyebrow}</Eyebrow>}
-      <h2 className={`mt-2.5 font-display text-3xl sm:text-4xl lg:text-[2.7rem] leading-[1.05] uppercase ${light ? 'text-cream' : 'text-charcoal'}`}>
-        {title}
-      </h2>
-      {kicker && <p className={`mt-3 text-[1rem] leading-relaxed ${light ? 'text-cream/75' : 'text-ink-soft'}`}>{kicker}</p>}
-    </div>
   )
 }
 
@@ -129,16 +117,16 @@ function Reveal({ children, className = '', delay = 0, as: Tag = 'div' }) {
     if (reduce || typeof IntersectionObserver === 'undefined') { setSeen(true); return }
     const io = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) { setSeen(true); io.disconnect() } },
-      { threshold: 0.1, rootMargin: '0px 0px -6% 0px' },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
     )
     io.observe(el)
-    const t = setTimeout(() => setSeen(true), 1400)
+    const t = setTimeout(() => setSeen(true), 1600)
     return () => { io.disconnect(); clearTimeout(t) }
   }, [])
   return (
     <Tag
       ref={ref}
-      className={`transition-all duration-700 ease-smooth ${seen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'} ${className}`}
+      className={`transition-all duration-[600ms] ease-smooth ${seen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} ${className}`}
       style={{ transitionDelay: seen ? `${delay}ms` : '0ms' }}
     >
       {children}
@@ -148,14 +136,14 @@ function Reveal({ children, className = '', delay = 0, as: Tag = 'div' }) {
 
 function Logo({ light = false, className = '' }) {
   return (
-    <a href="#inicio" className={`flex items-center gap-2.5 shrink-0 ${className}`} aria-label="Rainha do Entulho — ir para o início">
-      <img src="/brand/crown.png" alt="" width="48" height="36" className="w-9 sm:w-10 h-auto" />
+    <a href="#topo" className={`flex items-center gap-2.5 shrink-0 ${className}`} aria-label="Rainha do Entulho — início">
+      <img src="/brand/crown.png" alt="" width="44" height="33" className="w-8 sm:w-9 h-auto" />
       <span className="leading-none">
-        <span className={`block font-head font-extrabold tracking-tight text-[0.9rem] sm:text-[0.98rem] ${light ? 'text-cream' : 'text-charcoal'}`}>
+        <span className={`block font-head font-extrabold tracking-tight text-[0.86rem] sm:text-[0.95rem] ${light ? 'text-cream' : 'text-charcoal'}`}>
           RAINHA DO ENTULHO
         </span>
-        <span className={`mt-0.5 block font-head font-semibold text-[0.56rem] tracking-[0.2em] ${light ? 'text-gold-light' : 'text-gold-dark'}`}>
-          LOCAÇÃO DE CAÇAMBAS
+        <span className={`mt-1 block font-head font-semibold text-[0.54rem] tracking-[0.24em] ${light ? 'text-gold-light' : 'text-gold-dark'}`}>
+          LOCAÇÃO DE CAÇAMBAS · URUAÇU-GO
         </span>
       </span>
     </a>
@@ -163,10 +151,10 @@ function Logo({ light = false, className = '' }) {
 }
 
 /* ================================================================
-   HEADER  [MANTIDO]
+   HEADER
    ================================================================ */
 
-function useScrolled(offset = 12) {
+function useScrolled(offset = 8) {
   const [s, setS] = useState(false)
   useEffect(() => {
     const on = () => setS(window.scrollY > offset)
@@ -177,23 +165,28 @@ function useScrolled(offset = 12) {
   return s
 }
 
-function TopBar() {
+function TopStrip() {
   return (
-    <div className="hidden sm:block bg-charcoal text-cream/80">
+    <div className="hidden md:block bg-charcoal text-cream/70">
       <Container className="flex h-9 items-center justify-between text-[0.72rem] font-body">
         <span className="inline-flex items-center gap-2">
-          <MapPin size={13} strokeWidth={2.2} aria-hidden />
+          <MapPin size={13} strokeWidth={2.2} aria-hidden className="text-gold-light" />
           {REGIAO}
         </span>
-        <a href={`tel:+${WHATSAPP_NUMBER}`} className="inline-flex items-center gap-2 hover:text-cream">
-          <Phone size={13} strokeWidth={2.2} aria-hidden />{WHATSAPP_DISPLAY}
-        </a>
+        <span className="inline-flex items-center gap-5">
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-cream transition-colors">
+            <Instagram size={13} strokeWidth={2} aria-hidden />{INSTAGRAM_HANDLE}
+          </a>
+          <a href={`tel:+${WHATSAPP_NUMBER}`} className="inline-flex items-center gap-1.5 hover:text-cream transition-colors">
+            <Phone size={13} strokeWidth={2.2} aria-hidden />{WHATSAPP_DISPLAY}
+          </a>
+        </span>
       </Container>
     </div>
   )
 }
 
-function Navbar() {
+function Header() {
   const scrolled = useScrolled(8)
   const [open, setOpen] = useState(false)
   useEffect(() => {
@@ -203,47 +196,48 @@ function Navbar() {
 
   return (
     <header className="sticky top-0 z-50">
-      <TopBar />
-      <div className={`transition-all duration-300 ease-smooth ${scrolled ? 'bg-cream/95 backdrop-blur shadow-soft border-b border-line' : 'bg-cream/70 backdrop-blur-sm border-b border-transparent'}`}>
-        <Container className="flex h-16 sm:h-[4.25rem] items-center justify-between gap-4">
+      <TopStrip />
+      <div className={`border-b transition-colors duration-300 ${scrolled ? 'bg-cream/95 backdrop-blur border-line' : 'bg-cream border-line/60'}`}>
+        <Container className="flex h-16 lg:h-[4.5rem] items-center justify-between gap-6">
           <Logo />
-          <nav className="hidden lg:flex items-center gap-7" aria-label="Navegação principal">
+          <nav className="hidden lg:flex items-center gap-8" aria-label="Navegação principal">
             {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="font-body text-[0.86rem] text-ink-soft hover:text-red transition-colors">
+              <a key={l.href} href={l.href} className="nav-underline font-head text-[0.8rem] font-semibold uppercase tracking-[0.06em] text-charcoal/80 hover:text-charcoal">
                 {l.label}
               </a>
             ))}
           </nav>
           <div className="hidden lg:block">
-            <Button href={WA_CACAMBA} variant="solid" size="md" icon={ArrowRight}>Solicitar caçamba</Button>
+            <Button href={WA_ORCAMENTO} variant="primary" size="md" icon={ArrowUpRight}>Pedir orçamento</Button>
           </div>
           <button
-            className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-card text-charcoal"
+            className="lg:hidden inline-flex items-center justify-center w-11 h-11 text-charcoal"
             onClick={() => setOpen(true)}
             aria-label="Abrir menu"
           >
-            <Menu size={26} strokeWidth={2.4} />
+            <Menu size={26} strokeWidth={2.2} />
           </button>
         </Container>
       </div>
 
+      {/* Drawer mobile */}
       <div className={`fixed inset-0 z-[60] lg:hidden transition ${open ? 'visible' : 'invisible'}`} aria-hidden={!open}>
-        <div className={`absolute inset-0 bg-charcoal/50 transition-opacity ${open ? 'opacity-100' : 'opacity-0'}`} onClick={() => setOpen(false)} />
-        <div className={`absolute right-0 top-0 h-full w-[86%] max-w-sm bg-cream shadow-lift transition-transform duration-300 ease-smooth ${open ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`absolute inset-0 bg-charcoal/60 transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`} onClick={() => setOpen(false)} />
+        <div className={`absolute right-0 top-0 h-full w-[88%] max-w-sm bg-cream shadow-lift transition-transform duration-300 ease-smooth ${open ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex h-16 items-center justify-between px-5 border-b border-line">
             <Logo />
             <button className="w-11 h-11 inline-flex items-center justify-center text-charcoal" onClick={() => setOpen(false)} aria-label="Fechar menu">
-              <X size={24} strokeWidth={2.4} />
+              <X size={24} strokeWidth={2.2} />
             </button>
           </div>
-          <nav className="flex flex-col p-5 gap-1" aria-label="Navegação">
+          <nav className="flex flex-col p-5" aria-label="Navegação">
             {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="py-3 font-head font-semibold text-lg text-charcoal border-b border-line/70">
+              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="py-4 font-head font-bold uppercase tracking-[0.05em] text-[1.05rem] text-charcoal border-b border-line/70">
                 {l.label}
               </a>
             ))}
-            <Button href={WA_CACAMBA} variant="solid" size="lg" icon={MessageCircle} iconRight={false} className="mt-5 w-full">
-              Solicitar caçamba
+            <Button href={WA_ORCAMENTO} variant="primary" size="lg" icon={ArrowUpRight} className="mt-6 w-full">
+              Pedir orçamento
             </Button>
           </nav>
         </div>
@@ -253,105 +247,116 @@ function Navbar() {
 }
 
 /* ================================================================
-   HERO  [DESIGN MANTIDO — só ajuste de ritmo vertical]
+   HERO
    ================================================================ */
 
 function Hero() {
   return (
-    <section id="inicio" className="relative overflow-hidden grid-bg">
-      <div className="absolute inset-0 bg-gradient-to-b from-cream via-cream to-cream-2/60" aria-hidden />
-      <Container className="relative py-10 sm:py-14 lg:py-16">
-        <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-12 items-center">
-          <div>
-            <Reveal><Eyebrow>{REGIAO} · Locação de caçambas</Eyebrow></Reveal>
-            <Reveal delay={60}>
-              <h1 className="mt-3 font-display uppercase text-charcoal leading-[0.95] text-[2.5rem] sm:text-6xl lg:text-[4.2rem]">
-                Na sua obra,<br />quem manda<br />é a <span className="text-red">Rainha.</span>
-              </h1>
-            </Reveal>
-            <Reveal delay={120}>
-              <p className="mt-4 max-w-prose2 text-[1.03rem] leading-relaxed text-ink-soft">
-                Locação de caçamba de entulho de {CACAMBA_M3} em Uruaçu-GO. Semanal ou mensal,
-                com entrega e retirada na hora combinada — e preço fechado antes, direto no WhatsApp.
-              </p>
-            </Reveal>
-            <Reveal delay={180}>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Button href={WA_CACAMBA} variant="solid" size="lg" icon={ArrowRight}>Solicitar caçamba</Button>
-                <Button href={WA_GERAL} variant="outline" size="lg" icon={MessageCircle} iconRight={false}>Falar no WhatsApp</Button>
-              </div>
-            </Reveal>
-            <Reveal delay={240}>
-              <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[0.82rem] font-body text-ink-soft">
-                {['Negócio de família', `Caçamba de ${CACAMBA_M3}`, 'Semanal ou mensal'].map((t) => (
-                  <li key={t} className="inline-flex items-center gap-1.5">
-                    <Check size={15} strokeWidth={3} className="text-red" aria-hidden />{t}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
-
-          {/* HERO · cena real da operação (Captura 01):
-              /mascote/hero-operacao.webp — Rainha + caminhão poliguindaste + caçamba carregada.
-              Frame editorial: cantos arredondados, vinheta pra profundidade, fio dourado de marca
-              e os dois cards reais ancorados às bordas. rainha-hero.webp fica como spare. */}
-          <Reveal delay={140} className="relative mt-4 lg:mt-0">
-            <div className="relative overflow-hidden rounded-xl2 ring-1 ring-charcoal/10 shadow-card">
-              <img
-                src="/mascote/hero-operacao.webp"
-                alt="A Rainha do Entulho ao lado do caminhão poliguindaste com a caçamba carregada, em Uruaçu-GO"
-                width="800" height="800"
-                fetchPriority="high" decoding="async"
-                className="w-full aspect-square object-cover object-[50%_38%] select-none"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/45 via-transparent to-charcoal/10" aria-hidden />
-              <div className="absolute inset-0 rounded-xl2 ring-1 ring-inset ring-white/10" aria-hidden />
-              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-70" aria-hidden />
-            </div>
-            <div className="absolute top-5 -right-3 sm:-right-4 hidden sm:flex flex-col items-start rounded-card bg-cream/95 backdrop-blur px-3.5 py-2.5 shadow-lift ring-1 ring-line">
-              <span className="text-2xs font-semibold uppercase tracking-[0.12em] text-ink-soft">Caçamba</span>
-              <span className="font-head font-extrabold text-charcoal leading-none">{CACAMBA_M3}</span>
-              <span className="mt-0.5 text-2xs text-ink-soft">pronta pra obra</span>
-            </div>
-            <div className="absolute -bottom-4 left-3 sm:left-5 flex items-center gap-2.5 rounded-card bg-cream/95 backdrop-blur px-3.5 py-2.5 shadow-lift ring-1 ring-line">
-              <span className="grid place-items-center w-8 h-8 rounded-full bg-wa/15 text-wa animate-pulse-ring">
-                <MessageCircle size={16} strokeWidth={2.6} />
-              </span>
-              <span className="leading-tight">
-                <span className="block text-2xs font-semibold uppercase tracking-[0.12em] text-ink-soft">No WhatsApp</span>
-                <span className="block font-head font-bold text-sm text-charcoal">Resposta rápida</span>
-              </span>
+    <section id="topo" className="relative bg-cream">
+      <Container className="grid lg:grid-cols-[1.02fr_0.98fr] gap-10 lg:gap-14 items-center py-14 sm:py-20 lg:py-24">
+        {/* Coluna texto */}
+        <div className="max-w-xl">
+          <Reveal><Kicker>Locação de caçambas · {REGIAO}</Kicker></Reveal>
+          <Reveal delay={60}>
+            <h1 className="mt-5 font-display uppercase text-charcoal leading-[0.94] text-[2.6rem] sm:text-[3.6rem] lg:text-[4.1rem]">
+              Caçamba certa,<br />no lugar certo,<br /><span className="text-red">na hora combinada.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={120}>
+            <p className="mt-6 max-w-prose2 text-[1.02rem] leading-relaxed text-ink-soft">
+              Locação de caçamba de entulho de {CACAMBA_M3} em Uruaçu-GO. Semanal ou mensal,
+              com entrega e retirada agendadas — e preço fechado antes, direto no WhatsApp.
+            </p>
+          </Reveal>
+          <Reveal delay={180}>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button href={WA_CACAMBA} variant="primary" size="lg">Pedir uma caçamba</Button>
+              <Button href="#servicos" variant="outline" size="lg" icon={ArrowRight}>Ver serviços</Button>
             </div>
           </Reveal>
+          <Reveal delay={240}>
+            <dl className="mt-10 grid grid-cols-3 gap-px bg-line border-y border-line">
+              {[
+                ['Capacidade', CACAMBA_M3],
+                ['Planos', 'Semanal · mensal'],
+                ['Operação', 'Própria'],
+              ].map(([k, v]) => (
+                <div key={k} className="bg-cream px-1 py-3">
+                  <dt className="font-head text-[0.62rem] font-bold uppercase tracking-[0.14em] text-ink-soft">{k}</dt>
+                  <dd className="mt-1 font-head font-extrabold text-[0.95rem] text-charcoal">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         </div>
+
+        {/* Coluna imagem + mascote */}
+        <Reveal delay={140} className="relative lg:pl-14">
+          <div className="ph-zoom relative border border-charcoal/12 bg-charcoal">
+            <div className="h-1 bg-gold" aria-hidden />
+            <picture>
+              <source srcSet="/mascote/cacamba-real.webp" type="image/webp" />
+              <img
+                src="/mascote/cacamba-real.jpg"
+                alt="Caçamba de 5 m³ da Rainha do Entulho posicionada na rua, em Uruaçu-GO"
+                width="1200" height="960"
+                fetchPriority="high" decoding="async"
+                className="w-full aspect-[5/4] object-cover"
+              />
+            </picture>
+            <div className="absolute right-0 bottom-0 bg-charcoal text-cream px-4 py-2.5 text-right">
+              <span className="block font-head text-[0.56rem] font-bold uppercase tracking-[0.16em] text-gold-light">Frota própria</span>
+              <span className="block font-head font-extrabold text-[0.82rem] leading-tight">Caçamba de {CACAMBA_M3}</span>
+            </div>
+          </div>
+          {/* Mascote apresentando o equipamento — ao lado da foto, pés na mesma base, não flutua */}
+          <div className="pointer-events-none absolute left-0 sm:-left-6 lg:-left-2 bottom-0 w-[30%] sm:w-[27%] max-w-[150px]">
+            <div className="absolute inset-x-1 -bottom-1 h-3 rounded-[50%] bg-charcoal/25 blur-md" aria-hidden />
+            <img
+              src="/mascote/rainha-apontando.webp"
+              alt="A Rainha do Entulho, mascote da marca, apresentando a caçamba"
+              width="364" height="688"
+              loading="lazy" decoding="async"
+              className="relative w-full h-auto object-contain drop-shadow-[0_16px_22px_rgba(0,0,0,0.26)]"
+            />
+          </div>
+        </Reveal>
       </Container>
     </section>
   )
 }
 
 /* ================================================================
-   BARRA DE BENEFÍCIOS  [MANTIDO — compacto]
+   FAIXA DE CONFIANÇA
    ================================================================ */
 
-const BENEFITS = [
-  { icon: CalendarRange, title: 'Semanal ou mensal', text: 'Você escolhe o prazo' },
-  { icon: Clock, title: 'Hora combinada', text: 'Entrega e retirada agendadas' },
-  { icon: Tag, title: 'Preço fechado antes', text: 'Sem multa escondida' },
-  { icon: MessageCircle, title: 'Tudo no WhatsApp', text: 'Direto com a gente' },
+const TRUST = [
+  ['01', 'Negócio de família', 'Você fala direto com quem opera'],
+  ['02', `Caçamba de ${CACAMBA_M3}`, 'Um tamanho, feito pra entulho pesado'],
+  ['03', 'Semanal ou mensal', 'Você escolhe o prazo'],
+  ['04', 'Preço fechado antes', 'Sem multa escondida, tudo no WhatsApp'],
 ]
 
-function BenefitsBar() {
+const TRUST_BORDERS = [
+  '',
+  'border-l border-white/10',
+  'border-t border-white/10 lg:border-t-0 lg:border-l',
+  'border-t border-l border-white/10 lg:border-t-0',
+]
+
+function TrustBar() {
   return (
     <section className="bg-charcoal text-cream">
-      <Container className="grid grid-cols-2 lg:grid-cols-4 divide-y divide-white/10 lg:divide-y-0 lg:divide-x lg:divide-white/10">
-        {BENEFITS.map(({ icon: Icon, title, text }, i) => (
-          <Reveal key={title} delay={i * 50} className="flex items-start gap-3 py-4 lg:py-5 lg:px-6 first:lg:pl-0 last:lg:pr-0">
-            <Icon size={20} strokeWidth={2} className="mt-0.5 text-gold-light shrink-0" aria-hidden />
-            <span>
-              <span className="block font-head font-bold text-[0.9rem]">{title}</span>
-              <span className="block text-[0.78rem] text-cream/60">{text}</span>
-            </span>
+      <Container className="grid grid-cols-2 lg:grid-cols-4">
+        {TRUST.map(([n, title, text], i) => (
+          <Reveal
+            key={n}
+            delay={i * 60}
+            className={`py-7 lg:py-8 lg:px-8 lg:first:pl-0 lg:last:pr-0 ${TRUST_BORDERS[i]}`}
+          >
+            <span className="font-display text-[0.95rem] text-gold-light/70 tabular-nums">{n}</span>
+            <h3 className="mt-1.5 font-head font-extrabold text-[0.98rem]">{title}</h3>
+            <p className="mt-1 text-[0.8rem] leading-snug text-cream/55">{text}</p>
           </Reveal>
         ))}
       </Container>
@@ -360,77 +365,107 @@ function BenefitsBar() {
 }
 
 /* ================================================================
-   SERVIÇOS  [4 cards, visual variado]
+   SERVIÇOS — apresentação editorial, numerada
    ================================================================ */
+
+function ServiceRow({ n, title, text, spec, cta, href, image, imageAlt, reverse, dark }) {
+  return (
+    <Reveal
+      className={`grid gap-8 lg:gap-14 items-center ${image ? 'lg:grid-cols-2' : 'lg:grid-cols-[0.9fr_1.1fr]'} ${dark ? 'text-cream' : ''}`}
+    >
+      {/* Bloco texto */}
+      <div className={reverse ? 'lg:order-2' : ''}>
+        <div className="flex items-baseline gap-4">
+          <span className={`font-display text-[2.4rem] leading-none tabular-nums ${dark ? 'text-gold-light/40' : 'text-red/20'}`}>{n}</span>
+          <h3 className={`font-display uppercase leading-[0.98] text-[1.8rem] sm:text-[2.1rem] ${dark ? 'text-cream' : 'text-charcoal'}`}>{title}</h3>
+        </div>
+        <p className={`mt-4 max-w-md text-[0.98rem] leading-relaxed ${dark ? 'text-cream/70' : 'text-ink-soft'}`}>{text}</p>
+        {spec && (
+          <ul className={`mt-5 flex flex-wrap gap-x-6 gap-y-2 text-[0.82rem] font-head font-semibold ${dark ? 'text-cream/80' : 'text-charcoal'}`}>
+            {spec.map((s) => (
+              <li key={s} className="inline-flex items-center gap-1.5">
+                <Check size={14} strokeWidth={3} className={dark ? 'text-gold-light' : 'text-red'} aria-hidden />{s}
+              </li>
+            ))}
+          </ul>
+        )}
+        <a
+          href={href}
+          target="_blank" rel="noopener noreferrer"
+          className={`mt-6 inline-flex items-center gap-2 font-head font-bold uppercase tracking-[0.06em] text-[0.78rem] ${dark ? 'text-gold-light hover:text-cream' : 'text-red hover:text-red-dark'} transition-colors`}
+        >
+          {cta} <ArrowRight size={15} strokeWidth={2.8} className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
+        </a>
+      </div>
+
+      {/* Bloco imagem (opcional) */}
+      {image && (
+        <div className={`ph-zoom border border-charcoal/12 ${reverse ? 'lg:order-1' : ''}`}>
+          <picture>
+            <source srcSet={image.replace('.jpg', '.webp')} type="image/webp" />
+            <img src={image} alt={imageAlt} width="1100" height="825" loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-[50%_22%]" />
+          </picture>
+        </div>
+      )}
+      {/* Sem imagem: bloco tipográfico */}
+      {!image && (
+        <div className={`border-l-2 pl-6 lg:pl-10 py-2 ${dark ? 'border-gold-light/40' : 'border-red/30'} ${reverse ? 'lg:order-1' : ''}`}>
+          <p className={`font-display uppercase leading-[1.02] text-[1.5rem] sm:text-[1.9rem] ${dark ? 'text-cream/90' : 'text-charcoal/85'}`}>
+            {spec && spec.length
+              ? spec.join(' · ')
+              : 'Uma conversa de WhatsApp resolve.'}
+          </p>
+        </div>
+      )}
+    </Reveal>
+  )
+}
 
 function Servicos() {
   return (
-    <section id="servicos" className={`${SEC} bg-white`}>
-      <Container>
-        <Reveal>
-          <SectionTitle
-            eyebrow="O que a gente faz"
-            title="Uma caçamba, do jeito que a obra precisa."
-            kicker="Um tamanho único de 5 m³, feito pra entulho pesado. O que muda é o prazo e a forma de atender."
-          />
+    <section id="servicos" className="bg-cream">
+      <Container className="py-20 sm:py-24 lg:py-28">
+        <Reveal className="max-w-2xl">
+          <Kicker>O que a gente faz</Kicker>
+          <h2 className="mt-4 font-display uppercase text-charcoal leading-[0.98] text-[2.3rem] sm:text-[3rem]">
+            Soluções pra tirar o entulho do caminho
+          </h2>
+          <p className="mt-4 text-[1rem] leading-relaxed text-ink-soft">
+            Um tamanho de caçamba, {CACAMBA_M3}, feito pra material pesado de obra. O que muda é o
+            prazo e a forma de atender.
+          </p>
         </Reveal>
 
-        <div className="mt-9 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1 — destaque, com preço */}
-          <Reveal className="sm:col-span-2 lg:col-span-2">
-            <div className="group h-full flex flex-col justify-between rounded-xl2 bg-cream-2/70 p-6 ring-1 ring-line lift">
-              <div>
-                <span className="grid place-items-center w-12 h-12 rounded-card bg-red text-cream">
-                  <Truck size={24} strokeWidth={2} aria-hidden />
-                </span>
-                <h3 className="mt-4 font-head font-extrabold text-[1.15rem] text-charcoal">Locação de caçamba {CACAMBA_M3}</h3>
-                <p className="mt-1.5 text-[0.92rem] leading-relaxed text-ink-soft max-w-sm">
-                  Semanal ou mensal, entregue no seu endereço em Uruaçu. Pra reforma, obra ou limpeza pesada.
-                </p>
-              </div>
-              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-                <span className="font-head font-bold text-[0.95rem] text-gold-dark tabular-nums">{PRECO_CURTO}</span>
-                <a href={WA_CACAMBA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-head font-bold text-[0.85rem] text-red group-hover:gap-2.5 transition-all">
-                  Pedir no WhatsApp <ArrowRight size={16} strokeWidth={2.6} aria-hidden />
-                </a>
-              </div>
-            </div>
-          </Reveal>
+        <div className="mt-14 lg:mt-16 space-y-16 lg:space-y-20">
+          <ServiceRow
+            n="01"
+            title="Locação de caçamba 5 m³"
+            text="Semanal ou mensal, entregue no seu endereço em Uruaçu. Pra reforma, obra nova, demolição ou limpeza pesada de quintal."
+            spec={[PRECO_SEMANAL, PRECO_MENSAL]}
+            cta="Pedir no WhatsApp"
+            href={WA_CACAMBA}
+          />
 
-          {/* Cards 2 e 3 — ícone */}
-          {[
-            { icon: Recycle, title: 'Retirada de entulho', text: 'Obra, reforma, demolição e limpeza de quintal — a gente tira do caminho.' },
-            { icon: Truck, title: 'Coleta e transporte', text: 'A gente busca a caçamba cheia e leva pro destino certo.' },
-          ].map(({ icon: Icon, title, text }, i) => (
-            <Reveal key={title} delay={80 + i * 60}>
-              <div className="group h-full flex flex-col rounded-xl2 bg-white p-5 ring-1 ring-line shadow-soft lift">
-                <span className="grid place-items-center w-11 h-11 rounded-card bg-red/[0.08] text-red">
-                  <Icon size={22} strokeWidth={2} aria-hidden />
-                </span>
-                <h3 className="mt-3.5 font-head font-extrabold text-[1rem] text-charcoal">{title}</h3>
-                <p className="mt-1.5 text-[0.88rem] leading-relaxed text-ink-soft flex-1">{text}</p>
-                <a href={WA_CACAMBA} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 font-head font-bold text-[0.82rem] text-red group-hover:gap-2.5 transition-all">
-                  Pedir no WhatsApp <ArrowRight size={15} strokeWidth={2.6} aria-hidden />
-                </a>
-              </div>
-            </Reveal>
-          ))}
+          <ServiceRow
+            n="02"
+            title="Retirada de entulho"
+            text="A gente separa, carrega e leva o material pro destino certo. Obra, reforma, demolição e limpeza de terreno — sem acúmulo na frente da sua casa."
+            spec={['Material de obra', 'Destino certo', 'Sem acúmulo']}
+            cta="Falar com a gente"
+            href={WA_GERAL}
+            image="/mascote/diferenciais-rainha.jpg"
+            imageAlt="Pátio de triagem da Rainha do Entulho, com caçambas e material separado"
+            reverse
+          />
 
-          {/* Card 4 — charcoal invertido, pra ritmo */}
-          <Reveal delay={200} className="sm:col-span-2 lg:col-span-2">
-            <div className="group h-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl2 bg-charcoal p-5 sm:p-6 text-cream lift">
-              <div>
-                <span className="grid place-items-center w-11 h-11 rounded-card bg-gold/20 text-gold-light">
-                  <HardHat size={22} strokeWidth={2} aria-hidden />
-                </span>
-                <h3 className="mt-3.5 font-head font-extrabold text-[1.05rem]">Atendimento para obras</h3>
-                <p className="mt-1.5 text-[0.9rem] leading-relaxed text-cream/70 max-w-md">
-                  Construtora e obra da cidade com fluxo de caçamba sem atrasar o cronograma.
-                </p>
-              </div>
-              <Button href={WA_GERAL} variant="primary" size="sm" icon={ArrowRight} className="shrink-0">Falar com a gente</Button>
-            </div>
-          </Reveal>
+          <ServiceRow
+            n="03"
+            title="Coleta e transporte"
+            text="Encheu, avisou: a gente busca a caçamba cheia no caminhão poliguindaste e devolve vazia pra você seguir a obra."
+            spec={['Poliguindaste próprio', 'Não é intermediação']}
+            cta="Combinar coleta"
+            href={WA_GERAL}
+          />
         </div>
       </Container>
     </section>
@@ -438,248 +473,187 @@ function Servicos() {
 }
 
 /* ================================================================
-   COMO FUNCIONA  [4 passos horizontais, compacto]
+   A CAÇAMBA — destaque de equipamento + especificações
+   ================================================================ */
+
+const SPECS = [
+  ['Capacidade', CACAMBA_M3],
+  ['Tipo', 'Caçamba estacionária (poliguindaste)'],
+  ['Indicada para', 'Reforma · obra · demolição · limpeza'],
+  ['Planos', `${PRECO_SEMANAL}  ·  ${PRECO_MENSAL}`],
+  ['Entrega e retirada', 'Agendadas, hora combinada'],
+  ['Atendimento', REGIAO],
+]
+
+function Cacamba() {
+  return (
+    <section id="cacamba" className="bg-charcoal text-cream">
+      <div className="grid lg:grid-cols-2">
+        {/* Foto grande, full-bleed no lado */}
+        <Reveal className="ph-zoom relative min-h-[340px] lg:min-h-[560px] border-b lg:border-b-0 lg:border-r border-white/10">
+          <picture>
+            <source srcSet="/mascote/hero-operacao.webp" type="image/webp" />
+            <img
+              src="/mascote/hero-operacao.jpg"
+              alt="A caçamba da Rainha do Entulho carregada no caminhão poliguindaste, em Uruaçu-GO"
+              width="1024" height="1024"
+              loading="lazy" decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-[52%_18%]"
+            />
+          </picture>
+        </Reveal>
+
+        {/* Especificações */}
+        <Reveal delay={80} className="px-5 sm:px-10 lg:px-16 py-16 lg:py-20">
+          <Kicker light>O equipamento</Kicker>
+          <h2 className="mt-4 font-display uppercase leading-[0.98] text-[2.2rem] sm:text-[2.8rem]">
+            Uma caçamba, feita pra aguentar obra
+          </h2>
+          <p className="mt-4 max-w-md text-[0.98rem] leading-relaxed text-cream/70">
+            Chapa reforçada, {CACAMBA_M3} de capacidade e caminhão poliguindaste da própria empresa
+            rodando Uruaçu. Operação própria — você não fala com intermediário.
+          </p>
+
+          <dl className="mt-9 divide-y divide-white/10 border-y border-white/10">
+            {SPECS.map(([k, v]) => (
+              <div key={k} className="grid grid-cols-[9rem_1fr] sm:grid-cols-[11rem_1fr] gap-4 py-3.5">
+                <dt className="font-head text-[0.68rem] font-bold uppercase tracking-[0.14em] text-cream/50">{k}</dt>
+                <dd className="font-head font-semibold text-[0.9rem] text-cream tabular-nums">{v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Button href={WA_CACAMBA} variant="gold" size="lg">Pedir esta caçamba</Button>
+            <Button href={WA_REGIAO} variant="outline-light" size="lg" icon={MapPin} iconRight={false}>Consultar região</Button>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+/* ================================================================
+   COMO FUNCIONA — 4 etapas + mascote (momento 2)
    ================================================================ */
 
 const STEPS = [
-  { icon: MessageCircle, title: 'Chama no WhatsApp', text: 'Manda o endereço e o tipo de material.' },
-  { icon: Truck, title: 'A gente entrega', text: 'Caçamba na porta, dia e hora combinados.' },
-  { icon: CalendarRange, title: 'Você usa no seu prazo', text: '7 ou 30 dias. Você escolhe.' },
-  { icon: Recycle, title: 'A gente retira', text: 'Avisou, a gente busca e dá o destino certo.' },
+  ['01', 'Fale com a Rainha', 'Chama no WhatsApp com o endereço e o tipo de material.'],
+  ['02', 'Combina preço e data', 'A gente fecha o valor e a data de entrega na hora.'],
+  ['03', 'A gente entrega', 'Caçamba na porta, no dia e hora combinados.'],
+  ['04', 'A gente retira', 'Encheu ou acabou o prazo, você avisa e a gente busca.'],
 ]
 
 function ComoFunciona() {
   return (
-    <section id="como-funciona" className={`${SEC} bg-cream`}>
-      <Container>
-        <Reveal>
-          <SectionTitle
-            eyebrow="Como funciona"
-            title="Do WhatsApp à retirada, em 4 passos."
-            kicker="Sem visita técnica, sem proposta demorada."
-          />
+    <section id="como-funciona" className="bg-cream">
+      <Container className="py-20 sm:py-24 lg:py-28">
+        <Reveal className="max-w-2xl">
+          <Kicker>Como funciona</Kicker>
+          <h2 className="mt-4 font-display uppercase text-charcoal leading-[0.98] text-[2.3rem] sm:text-[3rem]">
+            Do WhatsApp à retirada, em 4 passos
+          </h2>
+          <p className="mt-4 text-[1rem] leading-relaxed text-ink-soft">
+            Sem visita técnica, sem proposta demorada. Uma conversa e a caçamba está na sua obra.
+          </p>
         </Reveal>
-        <ol className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-7">
-          {STEPS.map(({ icon: Icon, title, text }, i) => (
-            <Reveal as="li" key={title} delay={i * 70} className="relative">
-              <div className="flex items-center gap-3">
-                <span className="font-display text-3xl text-red/25 tabular-nums leading-none">{String(i + 1).padStart(2, '0')}</span>
-                <span className="grid place-items-center w-9 h-9 rounded-card bg-charcoal text-cream shrink-0">
-                  <Icon size={18} strokeWidth={2} aria-hidden />
-                </span>
-              </div>
-              <h3 className="mt-3 font-head font-extrabold text-[0.98rem] text-charcoal">{title}</h3>
-              <p className="mt-1 text-[0.85rem] leading-relaxed text-ink-soft">{text}</p>
-              {i < STEPS.length - 1 && (
-                <span className="hidden lg:block absolute top-3.5 -right-3 text-gold" aria-hidden>
-                  <ArrowRight size={18} strokeWidth={2.5} />
-                </span>
-              )}
-            </Reveal>
-          ))}
-        </ol>
+
+        <div className="mt-12 lg:mt-14 grid lg:grid-cols-[0.62fr_1.38fr] gap-10 lg:gap-14 items-end">
+          {/* Mascote — apoiada na base, ajuda a explicar */}
+          <div className="relative hidden lg:block w-[62%] max-w-[190px] mx-auto lg:mx-0">
+            <div className="absolute inset-x-3 -bottom-1 h-3 rounded-[50%] bg-charcoal/20 blur-md" aria-hidden />
+            <img
+              src="/mascote/rainha-whatsapp.webp"
+              alt="A Rainha do Entulho com o celular, pronta pra atender no WhatsApp"
+              width="210" height="422"
+              loading="lazy" decoding="async"
+              className="relative w-full h-auto object-contain drop-shadow-[0_14px_20px_rgba(0,0,0,0.2)]"
+            />
+          </div>
+
+          {/* Etapas */}
+          <ol className="divide-y divide-line border-y border-line">
+            {STEPS.map(([n, title, text], i) => (
+              <Reveal as="li" key={n} delay={i * 70} className="grid grid-cols-[3.5rem_1fr] sm:grid-cols-[5rem_1fr] gap-4 py-6">
+                <span className="font-display text-[2.3rem] sm:text-[2.9rem] leading-none text-red/25 tabular-nums">{n}</span>
+                <div className="pt-1">
+                  <h3 className="font-head font-extrabold text-[1.05rem] text-charcoal uppercase tracking-[0.02em]">{title}</h3>
+                  <p className="mt-1.5 text-[0.92rem] leading-relaxed text-ink-soft">{text}</p>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
       </Container>
     </section>
   )
 }
 
 /* ================================================================
-   DIFERENCIAIS + RAINHA  [seção combinada, charcoal]
+   POR QUE A RAINHA — diferenciais reais, tipográfico
    ================================================================ */
 
 const DIFERENCIAIS = [
-  { icon: MessageCircle, title: 'Negócio de família', text: 'Você fala direto com quem opera. Sem central, sem intermediário.' },
-  { icon: Tag, title: 'Preço combinado antes', text: 'Você sabe o valor no WhatsApp, antes da caçamba sair.' },
-  { icon: CalendarRange, title: 'No seu prazo', text: 'Semanal ou mensal — e a gente retira quando você avisar.' },
+  ['Negócio de família', 'Você fala direto com quem opera a caçamba. Sem central, sem intermediário no meio.'],
+  ['Preço combinado antes', 'O valor é fechado no WhatsApp, antes da caçamba sair. Sem surpresa na fatura.'],
+  ['No seu prazo', 'Semanal ou mensal — e a retirada acontece quando você avisa que encheu.'],
+  ['Operação própria', 'Caçamba e caminhão poliguindaste são da empresa. Não é intermediação de terceiro.'],
 ]
 
-function DiferenciaisRainha() {
+function PorQue() {
   return (
-    <section className="py-12 sm:py-14 lg:py-16 bg-charcoal text-cream overflow-hidden">
-      <Container className="grid lg:grid-cols-[0.46fr_0.54fr] gap-8 lg:gap-16 items-center">
-        {/* DIFERENCIAIS · foto editorial oficial (personagem + caçambas + operação).
-            /mascote/diferenciais-rainha.webp — imagem QUADRADA original, exclusiva desta
-            seção (não duplicar em outro lugar). Sem fade/máscara: card com cantos
-            arredondados, borda dourada bem discreta e sombra suave — o cenário (caçambas,
-            máquinas, resíduos separados) fica visível de propósito. */}
-        <Reveal className="order-2 lg:order-1">
-          <div className="relative mx-auto max-w-[420px] lg:max-w-none">
-            <div className="absolute -inset-3 rounded-[1.75rem] bg-gold/[0.07] blur-2xl" aria-hidden />
-            <img
-              src="/mascote/diferenciais-rainha.webp"
-              alt="A Rainha do Entulho no pátio de triagem, com caçambas e máquinas da operação — deixa que a Rainha resolve"
-              width="1024" height="1024"
-              loading="lazy" decoding="async"
-              className="relative w-full aspect-square object-cover object-[50%_20%] rounded-xl2 ring-1 ring-gold-light/20 shadow-[0_20px_45px_-18px_rgba(0,0,0,0.55)] select-none"
-            />
-          </div>
-        </Reveal>
-
-        <Reveal delay={80} className="order-1 lg:order-2">
-          <Eyebrow className="text-gold-light">Por que a Rainha</Eyebrow>
-          <h2 className="mt-2.5 font-display uppercase leading-[0.98] text-4xl sm:text-5xl lg:text-[3.2rem] text-cream">
-            Deixa que a<br />Rainha resolve.
-          </h2>
-          <p className="mt-3 max-w-md text-cream/75 leading-relaxed">
-            Pedir caçamba é uma conversa de WhatsApp: você diz o que precisa, a gente combina preço e data.
-          </p>
-
-          <ul className="mt-6 space-y-3.5">
-            {DIFERENCIAIS.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="flex gap-3.5">
-                <span className="grid place-items-center w-9 h-9 rounded-card bg-gold/15 text-gold-light shrink-0">
-                  <Icon size={17} strokeWidth={2} aria-hidden />
-                </span>
-                <span>
-                  <span className="block font-head font-bold text-[0.95rem] text-cream">{title}</span>
-                  <span className="block text-[0.85rem] text-cream/65">{text}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <Button href={WA_CACAMBA} variant="primary" size="lg" icon={ArrowRight} className="mt-7">
-            Solicitar caçamba
-          </Button>
-        </Reveal>
-      </Container>
-    </section>
-  )
-}
-
-/* ================================================================
-   FROTA + ÁREA DE ATENDIMENTO  [duas colunas]
-   ================================================================ */
-
-function FrotaAtende() {
-  return (
-    <section id="atende" className={`${SEC} bg-cream-2/50`}>
-      <Container className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-stretch">
-        {/* Frota */}
-        <Reveal className="flex flex-col overflow-hidden rounded-xl2 bg-white ring-1 ring-line shadow-soft">
-          <picture>
-            <source srcSet="/mascote/cacamba-real.webp" type="image/webp" />
-            <img src="/mascote/cacamba-real.jpg" alt="Caçamba de 5 m³ da Rainha do Entulho na rua, em Uruaçu" loading="lazy" decoding="async" className="w-full h-56 sm:h-64 object-cover" />
-          </picture>
-          <div className="p-6">
-            <Eyebrow>Nossa operação</Eyebrow>
-            <h2 className="mt-2 font-display uppercase text-2xl sm:text-3xl text-charcoal leading-tight">Estrutura pronta pra sua obra</h2>
-            <p className="mt-2.5 text-[0.92rem] leading-relaxed text-ink-soft">
-              Caçamba de {CACAMBA_M3} e caminhão poliguindaste rodando Uruaçu. Operação da empresa — não é intermediação.
-            </p>
-            <a href={WA_GERAL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 font-head font-bold text-[0.85rem] text-red hover:gap-2.5 transition-all">
-              Pedir foto da caçamba <ArrowRight size={16} strokeWidth={2.6} aria-hidden />
-            </a>
-          </div>
-        </Reveal>
-
-        {/* Área de atendimento */}
-        <Reveal delay={100} className="flex flex-col rounded-xl2 bg-charcoal text-cream p-6 sm:p-8">
-          <Eyebrow className="text-gold-light">Onde a gente chega</Eyebrow>
-          <h2 className="mt-2 font-display uppercase text-2xl sm:text-3xl leading-tight">Atende Uruaçu-GO e região</h2>
-          <p className="mt-2.5 text-[0.92rem] leading-relaxed text-cream/70">
-            Base no perímetro urbano de Uruaçu. A gente roda os bairros da cidade e combina a distância pra fora do perímetro.
-          </p>
-
-          <div className="mt-5 flex-1 grid place-items-center rounded-card bg-white/[0.04] ring-1 ring-white/10 py-8">
-            <div className="text-center">
-              <span className="grid place-items-center w-14 h-14 mx-auto rounded-full bg-gold/15 text-gold-light">
-                <MapPin size={26} strokeWidth={2} aria-hidden />
-              </span>
-              <p className="mt-3 font-display uppercase text-xl text-cream leading-none">Uruaçu-GO</p>
-              <p className="mt-1 text-[0.78rem] text-cream/55">Perímetro urbano e região</p>
-            </div>
-          </div>
-
-          <Button href={WA_REGIAO} variant="primary" size="md" icon={MapPin} iconRight={false} className="mt-5 self-start">
-            Consultar minha região
-          </Button>
-        </Reveal>
-      </Container>
-    </section>
-  )
-}
-
-/* ================================================================
-   CTA WHATSAPP  [horizontal, altura controlada]  id=contato
-   ================================================================ */
-
-function CtaWhatsapp() {
-  return (
-    <section id="contato" className="relative overflow-hidden text-cream">
-      {/* fundo profundo: vermelho → vinho → escuro, com vinheta atrás da personagem */}
-      <div className="absolute inset-0 bg-[linear-gradient(105deg,#8B1226_0%,#B51731_40%,#8B1226_68%,#5E0F1D_100%)]" aria-hidden />
-      <div className="absolute inset-0 bg-[radial-gradient(78%_120%_at_84%_72%,rgba(0,0,0,0.52),transparent_58%)]" aria-hidden />
-      <div className="absolute right-[6%] top-1/2 -translate-y-1/2 h-72 w-72 rounded-full bg-gold/12 blur-[80px]" aria-hidden />
-      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#5E0F1D] to-transparent" aria-hidden />
-
-      <Container className="relative grid lg:grid-cols-[1.3fr_0.7fr] gap-4 lg:gap-8 items-stretch">
-        <div className="py-10 sm:py-12 lg:py-14">
+    <section id="porque" className="bg-charcoal text-cream">
+      <Container className="py-20 sm:py-24 lg:py-28">
+        <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
           <Reveal>
-            <h2 className="font-display uppercase leading-[0.9] text-[2.2rem] sm:text-5xl lg:text-[3.4rem]">
-              Precisou de caçamba?
-              <span className="mt-1 block text-gold-light">Chama a Rainha.</span>
+            <Kicker light>Por que a Rainha</Kicker>
+            <h2 className="mt-4 font-display uppercase leading-[0.96] text-[2.3rem] sm:text-[3rem]">
+              Deixa que a<br />Rainha resolve
             </h2>
-            <p className="mt-3.5 max-w-md text-[0.95rem] leading-relaxed text-cream/80">
-              Resposta rápida, preço combinado antes e entrega com hora marcada em Uruaçu.
+            <p className="mt-5 max-w-xs text-[0.95rem] leading-relaxed text-cream/60">
+              CNPJ {CNPJ} · Uruaçu-GO. Empresa registrada, frota própria e atendimento direto.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
-              <Button
-                href={WA_CACAMBA} variant="primary" size="lg" icon={MessageCircle} iconRight={false}
-                className="ring-1 ring-gold-light/40 shadow-[0_12px_34px_-10px_rgba(0,0,0,0.55)]"
-              >
-                Pedir pelo WhatsApp
-              </Button>
-              <a
-                href={`tel:+${WHATSAPP_NUMBER}`}
-                className="inline-flex items-center gap-2 font-head font-bold text-base sm:text-lg tabular-nums text-cream hover:text-gold-light transition-colors"
-              >
-                <Phone size={16} strokeWidth={2.6} className="text-gold-light" aria-hidden />
-                {WHATSAPP_DISPLAY}
-              </a>
-            </div>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <dl className="divide-y divide-white/10 border-y border-white/10">
+              {DIFERENCIAIS.map(([title, text]) => (
+                <div key={title} className="py-6 grid sm:grid-cols-[13rem_1fr] gap-2 sm:gap-6">
+                  <dt className="font-display uppercase text-[1.15rem] text-gold-light leading-tight">{title}</dt>
+                  <dd className="text-[0.95rem] leading-relaxed text-cream/70">{text}</dd>
+                </div>
+              ))}
+            </dl>
           </Reveal>
         </div>
-
-        {/* CTA · imagem fornecida pelo cliente (retrato). /mascote/rainha-cta-foto.webp —
-            enquadrada em coroa + rosto + ombros; a faixa "RAINHA DO BRASIL" original foi
-            cortada de fora (texto errado pra esse site). Sem moldura: máscara radial funde
-            a imagem no vermelho/vinho da seção. rainha-whatsapp.webp fica como spare oficial. */}
-        <Reveal delay={120} className="relative min-h-[220px] sm:min-h-[260px] lg:min-h-0 lg:self-stretch">
-          <div className="absolute inset-x-0 bottom-0 top-4 bg-[radial-gradient(closest-side,rgba(193,154,107,0.18),transparent_75%)]" aria-hidden />
-          <img
-            src="/mascote/rainha-cta-foto.webp"
-            alt="A Rainha do Entulho — atendimento pelo WhatsApp"
-            width="819" height="578"
-            loading="lazy" decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-[50%_15%] select-none pointer-events-none [-webkit-mask-image:radial-gradient(54%_70%_at_50%_36%,#000_66%,transparent_98%)] [mask-image:radial-gradient(54%_70%_at_50%_36%,#000_66%,transparent_98%)]"
-          />
-        </Reveal>
       </Container>
     </section>
   )
 }
 
 /* ================================================================
-   FAQ  [5 perguntas, compacto]
+   GALERIA / TRABALHOS
+   Entra quando o cliente enviar fotos REAIS de obras e retiradas.
+   Não usar imagens genéricas nem repetir as fotos das outras seções.
+   ================================================================ */
+/* function Galeria() { ... } */
+
+/* ================================================================
+   FAQ — enxuto, editorial (sem cards)
    ================================================================ */
 
 const FAQS = [
   {
     q: 'Como funciona a locação?',
-    a: `Você contrata a caçamba de ${CACAMBA_M3} por 7 dias (semanal) ou 30 dias (mensal). A gente entrega no endereço combinado em Uruaçu e retira no fim do prazo — ou antes, se você avisar que já encheu.`,
+    a: `Você contrata a caçamba de ${CACAMBA_M3} por 7 dias (semanal) ou 30 dias (mensal). A gente entrega no endereço combinado em Uruaçu e retira no fim do prazo — ou antes, se você avisar que encheu.`,
   },
   {
-    q: 'Como solicito uma caçamba?',
+    q: 'Como peço uma caçamba?',
     a: `Chama no WhatsApp ${WHATSAPP_DISPLAY} com o endereço e o tipo de material. A gente combina preço e data de entrega na hora.`,
   },
   {
-    q: 'Qual o período de locação?',
-    a: '7 dias no plano semanal ou 30 dias no mensal. Precisando de mais tempo, é só renovar.',
-  },
-  {
-    q: 'Como funciona a retirada?',
-    a: 'Quando encher ou acabar o prazo, você avisa no WhatsApp e a gente agenda a retirada. O material vai pro destino certo.',
+    q: 'Quanto custa?',
+    a: `${PRECO_SEMANAL} no plano semanal, ${PRECO_MENSAL} no mensal. O valor é confirmado no WhatsApp antes da entrega. Não trabalhamos com diária avulsa.`,
   },
   {
     q: 'Quais regiões vocês atendem?',
@@ -696,9 +670,9 @@ function FAQItem({ q, a, open, onToggle, id }) {
           aria-expanded={open}
           aria-controls={`faq-panel-${id}`}
           onClick={onToggle}
-          className="flex w-full items-center justify-between gap-4 py-4 text-left"
+          className="flex w-full items-center justify-between gap-6 py-5 text-left"
         >
-          <span className="font-head font-bold text-[0.98rem] text-charcoal">{q}</span>
+          <span className="font-head font-bold text-[1rem] text-charcoal uppercase tracking-[0.02em]">{q}</span>
           <ChevronDown size={20} strokeWidth={2.4} className={`shrink-0 text-red transition-transform duration-300 ${open ? 'rotate-180' : ''}`} aria-hidden />
         </button>
       </h3>
@@ -706,10 +680,10 @@ function FAQItem({ q, a, open, onToggle, id }) {
         id={`faq-panel-${id}`}
         role="region"
         aria-labelledby={`faq-btn-${id}`}
-        className={`grid transition-all duration-300 ease-smooth ${open ? 'grid-rows-[1fr] pb-4' : 'grid-rows-[0fr]'}`}
+        className={`grid transition-all duration-300 ease-smooth ${open ? 'grid-rows-[1fr] pb-5' : 'grid-rows-[0fr]'}`}
       >
         <div className="overflow-hidden">
-          <p className="text-[0.9rem] leading-relaxed text-ink-soft">{a}</p>
+          <p className="max-w-2xl text-[0.94rem] leading-relaxed text-ink-soft">{a}</p>
         </div>
       </div>
     </div>
@@ -719,16 +693,22 @@ function FAQItem({ q, a, open, onToggle, id }) {
 function FAQ() {
   const [open, setOpen] = useState(0)
   return (
-    <section className={`${SEC_TIGHT} bg-white`}>
-      <Container className="grid lg:grid-cols-[0.8fr_1.2fr] gap-8 lg:gap-14">
+    <section className="bg-cream">
+      <Container className="py-16 sm:py-20 lg:py-24 grid lg:grid-cols-[0.7fr_1.3fr] gap-10 lg:gap-16">
         <Reveal>
-          <SectionTitle eyebrow="Dúvidas" title="Perguntas frequentes." />
-          <p className="mt-3 text-[0.92rem] text-ink-soft">
-            Não achou sua dúvida? <a href={WA_GERAL} target="_blank" rel="noopener noreferrer" className="font-semibold text-red underline underline-offset-2">Pergunta no WhatsApp.</a>
+          <Kicker>Dúvidas</Kicker>
+          <h2 className="mt-4 font-display uppercase text-charcoal leading-[0.98] text-[2.1rem] sm:text-[2.6rem]">
+            Perguntas<br />frequentes
+          </h2>
+          <p className="mt-4 text-[0.92rem] text-ink-soft">
+            Não achou sua dúvida?{' '}
+            <a href={WA_GERAL} target="_blank" rel="noopener noreferrer" className="font-semibold text-red underline underline-offset-2 hover:text-red-dark">
+              Pergunta no WhatsApp.
+            </a>
           </p>
         </Reveal>
         <Reveal delay={80}>
-          <div>
+          <div className="border-t border-line">
             {FAQS.map((f, i) => (
               <FAQItem key={f.q} id={i} {...f} open={open === i} onToggle={() => setOpen(open === i ? -1 : i)} />
             ))}
@@ -740,46 +720,97 @@ function FAQ() {
 }
 
 /* ================================================================
-   FOOTER  [compacto]
+   CTA FINAL — mascote (momento 3)
+   ================================================================ */
+
+function CtaFinal() {
+  return (
+    <section id="contato" className="relative overflow-hidden bg-red text-cream">
+      <div className="h-1 edge-gold opacity-90" aria-hidden />
+      <Container className="grid lg:grid-cols-[1.25fr_0.75fr] gap-8 items-end">
+        <div className="py-16 sm:py-20 lg:py-24">
+          <Reveal>
+            <Kicker light>Chama a Rainha</Kicker>
+            <h2 className="mt-4 font-display uppercase leading-[0.94] text-[2.6rem] sm:text-[3.4rem] lg:text-[3.9rem]">
+              Precisou de caçamba?<br />
+              <span className="text-gold-light">Chama a Rainha.</span>
+            </h2>
+            <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-cream/85">
+              Resposta rápida, preço combinado antes e entrega com hora marcada em Uruaçu-GO.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+              <Button href={WA_CACAMBA} variant="gold" size="lg" icon={MessageCircle} iconRight={false}>
+                Pedir pelo WhatsApp
+              </Button>
+              <a
+                href={`tel:+${WHATSAPP_NUMBER}`}
+                className="inline-flex items-center gap-2 font-head font-bold text-lg tabular-nums text-cream hover:text-gold-light transition-colors"
+              >
+                <Phone size={18} strokeWidth={2.6} className="text-gold-light" aria-hidden />
+                {WHATSAPP_DISPLAY}
+              </a>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Mascote convidando — apoiada na base da seção */}
+        <Reveal delay={120} className="relative hidden sm:block">
+          <div className="relative mx-auto lg:ml-auto lg:mr-0 w-[62%] sm:w-[54%] lg:w-[86%] max-w-[300px]">
+            <div className="absolute inset-x-6 bottom-1 h-4 rounded-[50%] bg-black/25 blur-lg" aria-hidden />
+            <img
+              src="/mascote/rainha-apresentando.webp"
+              alt="A Rainha do Entulho convidando você a chamar no WhatsApp"
+              width="308" height="436"
+              loading="lazy" decoding="async"
+              className="relative w-full h-auto object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.35)]"
+            />
+          </div>
+        </Reveal>
+      </Container>
+    </section>
+  )
+}
+
+/* ================================================================
+   FOOTER
    ================================================================ */
 
 function Footer() {
   return (
     <footer className="bg-charcoal text-cream/70">
-      <div className="h-1 edge-gold opacity-80" aria-hidden />
-      <Container className="py-10 grid gap-8 md:grid-cols-[1.5fr_1fr_1.3fr]">
+      <Container className="py-14 grid gap-10 md:grid-cols-[1.6fr_1fr_1.3fr]">
         <div>
           <Logo light />
-          <p className="mt-3 max-w-xs text-[0.84rem] leading-relaxed">
-            Locação de caçamba de entulho de {CACAMBA_M3} em Uruaçu-GO. Negócio de família.
+          <p className="mt-4 max-w-xs text-[0.86rem] leading-relaxed">
+            Locação de caçamba de entulho de {CACAMBA_M3} em Uruaçu-GO. Frota própria, negócio de família.
           </p>
         </div>
 
-        <nav aria-label="Navegação">
-          <h4 className="font-head font-bold text-2xs uppercase tracking-[0.14em] text-gold-light">Navegação</h4>
-          <ul className="mt-3.5 space-y-2.5">
+        <nav aria-label="Navegação do rodapé">
+          <h4 className="font-head font-bold text-[0.62rem] uppercase tracking-[0.18em] text-gold-light">Navegação</h4>
+          <ul className="mt-4 space-y-2.5">
             {NAV_LINKS.map((l) => (
-              <li key={l.href}><a href={l.href} className="text-[0.85rem] hover:text-cream">{l.label}</a></li>
+              <li key={l.href}><a href={l.href} className="text-[0.86rem] hover:text-cream transition-colors">{l.label}</a></li>
             ))}
           </ul>
         </nav>
 
         <div>
-          <h4 className="font-head font-bold text-2xs uppercase tracking-[0.14em] text-gold-light">Contato</h4>
-          <ul className="mt-3.5 space-y-2.5 text-[0.85rem]">
-            <li><a href={WA_GERAL} target="_blank" rel="noopener noreferrer" className="hover:text-cream">WhatsApp {WHATSAPP_DISPLAY}</a></li>
-            <li>{REGIAO}</li>
-            <li><a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-cream"><Instagram size={14} strokeWidth={2} aria-hidden />{INSTAGRAM_HANDLE}</a></li>
+          <h4 className="font-head font-bold text-[0.62rem] uppercase tracking-[0.18em] text-gold-light">Contato</h4>
+          <ul className="mt-4 space-y-2.5 text-[0.86rem]">
+            <li><a href={WA_GERAL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-cream transition-colors"><MessageCircle size={14} strokeWidth={2} aria-hidden />WhatsApp {WHATSAPP_DISPLAY}</a></li>
+            <li className="inline-flex items-center gap-2"><MapPin size={14} strokeWidth={2} aria-hidden />{REGIAO}</li>
+            <li><a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-cream transition-colors"><Instagram size={14} strokeWidth={2} aria-hidden />{INSTAGRAM_HANDLE}</a></li>
           </ul>
         </div>
       </Container>
 
       <div className="border-t border-white/10">
-        <Container className="flex flex-col sm:flex-row items-center justify-between gap-3 py-4 text-[0.74rem] text-cream/50">
+        <Container className="flex flex-col sm:flex-row items-center justify-between gap-3 py-5 text-[0.74rem] text-cream/50">
           <span>© {new Date().getFullYear()} Rainha do Entulho · CNPJ {CNPJ} · Uruaçu-GO</span>
-          <span className="flex gap-4">
-            <Link to="/privacidade" className="hover:text-cream">Privacidade</Link>
-            <Link to="/termos" className="hover:text-cream">Termos</Link>
+          <span className="flex gap-5">
+            <Link to="/privacidade" className="hover:text-cream transition-colors">Privacidade</Link>
+            <Link to="/termos" className="hover:text-cream transition-colors">Termos</Link>
           </span>
         </Container>
       </div>
@@ -788,45 +819,46 @@ function Footer() {
 }
 
 /* ================================================================
-   FLOATING WHATSAPP (mobile)
+   WHATSAPP FLUTUANTE (mobile)
    ================================================================ */
 
 function FloatingWhatsApp() {
-  const show = useScrolled(400)
+  const show = useScrolled(500)
   return (
     <a
       href={WA_CACAMBA}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar no WhatsApp"
-      className={`lg:hidden fixed bottom-4 right-4 z-40 grid place-items-center w-14 h-14 rounded-full bg-wa text-white shadow-lift transition-all duration-300 ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
+      className={`lg:hidden fixed bottom-4 right-4 z-40 inline-flex items-center gap-2 bg-wa text-white font-head font-bold text-[0.78rem] uppercase tracking-[0.04em] px-4 py-3 rounded-[3px] shadow-lift transition-all duration-300 ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'}`}
     >
-      <MessageCircle size={26} strokeWidth={2.4} />
+      <MessageCircle size={18} strokeWidth={2.4} />
+      Pedir caçamba
     </a>
   )
 }
 
 /* ================================================================
-   PAGE
+   PÁGINA
    ================================================================ */
 
 export default function App() {
   return (
     <div className="min-h-screen bg-cream">
-      <a href="#inicio" className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-charcoal focus:text-cream focus:px-4 focus:py-2 focus:rounded-card">
+      <a href="#servicos" className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-charcoal focus:text-cream focus:px-4 focus:py-2">
         Pular para o conteúdo
       </a>
-      <Navbar />
+      <Header />
       <main>
         <Hero />
-        <BenefitsBar />
+        <TrustBar />
         <Servicos />
+        <Cacamba />
         <ComoFunciona />
-        <DiferenciaisRainha />
-        <FrotaAtende />
-        {/* Prova social: entra quando houver depoimentos/nota do Google reais. */}
-        <CtaWhatsapp />
+        <PorQue />
+        {/* GALERIA/TRABALHOS entra aqui quando houver fotos reais de obras. */}
         <FAQ />
+        <CtaFinal />
       </main>
       <Footer />
       <FloatingWhatsApp />
