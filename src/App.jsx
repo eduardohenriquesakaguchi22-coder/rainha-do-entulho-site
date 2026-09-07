@@ -12,12 +12,13 @@ import {
    A mascote é o único elemento 3D/digital — proposital, aparece em
    3 momentos: HERO, COMO FUNCIONA e CTA FINAL.
    ----------------------------------------------------------------
-   FOTOS
-     /mascote/cacamba-real.webp      → foto REAL da caçamba (Hero)
-     /mascote/hero-operacao.webp     → cena Rainha + caminhão (seção A CAÇAMBA)
-     /mascote/diferenciais-rainha.webp → cena pátio de triagem (Serviços · retirada)
-   Cada foto é usada UMA vez. Gale­ria de obras entra quando o cliente
-   enviar fotos reais (marcador abaixo, antes do FAQ).
+   FOTOS — só a foto REAL da caçamba (usada em 2 recortes diferentes):
+     /mascote/cacamba-real.webp   → estabelece a caçamba inteira (Hero)
+     /mascote/cacamba-logo.webp   → detalhe da pintura/logotipo (seção A CAÇAMBA)
+   As cenas CGI (hero-operacao, diferenciais-rainha) NÃO são usadas — pareciam
+   IA e tinham a mascote embutida competindo com o equipamento. Ficam no disco.
+   Quando o cliente enviar fotos reais de entrega/retirada/obra, elas entram
+   nos Serviços e numa Galeria (marcador antes do FAQ).
    MASCOTE (recortes com alpha)
      /mascote/rainha-apontando.webp   → HERO (ao lado da caçamba)
      /mascote/rainha-whatsapp.webp    → COMO FUNCIONA (atende pelo WhatsApp)
@@ -299,9 +300,9 @@ function Hero() {
               <img
                 src="/mascote/cacamba-real.jpg"
                 alt="Caçamba de 5 m³ da Rainha do Entulho na rua, em Uruaçu-GO"
-                width="1200" height="960"
+                width="1200" height="917"
                 fetchPriority="high" decoding="async"
-                className="w-full aspect-[5/4] object-cover"
+                className="w-full aspect-[5/4] object-cover object-[56%_44%]"
               />
             </picture>
             <div className="absolute right-0 bottom-0 bg-charcoal text-cream px-4 py-2.5 text-right">
@@ -309,8 +310,8 @@ function Hero() {
               <span className="block font-head font-extrabold text-[0.82rem] leading-tight">{CACAMBA_M3} · Uruaçu-GO</span>
             </div>
           </div>
-          {/* Mascote apresentando o equipamento — ao lado da foto, pés na mesma base, não flutua */}
-          <div className="pointer-events-none absolute left-0 sm:-left-6 lg:-left-2 bottom-0 w-[30%] sm:w-[27%] max-w-[150px]">
+          {/* Mascote ao lado da foto — secundária ao equipamento, pés na mesma base, não flutua */}
+          <div className="pointer-events-none absolute left-0 sm:-left-7 lg:-left-3 bottom-0 w-[27%] sm:w-[24%] max-w-[140px]">
             <div className="absolute inset-x-1 -bottom-1 h-3 rounded-[50%] bg-charcoal/25 blur-md" aria-hidden />
             <img
               src="/mascote/rainha-apontando.webp"
@@ -436,6 +437,9 @@ function Servicos() {
           </p>
         </Reveal>
 
+        {/* Sem imagem por serviço: os números 01/02/03 + tipografia forte
+            separam os serviços. Quando o cliente enviar fotos reais de
+            entrega e de retirada, dá pra colocar uma foto grande por linha. */}
         <div className="mt-14 lg:mt-16 space-y-16 lg:space-y-20">
           <ServiceRow
             n="01"
@@ -453,8 +457,6 @@ function Servicos() {
             spec={['Obra e reforma', 'Demolição', 'Limpeza de terreno']}
             cta="Falar com a gente"
             href={WA_GERAL}
-            image="/mascote/diferenciais-rainha.jpg"
-            imageAlt="Caçambas e material separado no pátio da Rainha do Entulho"
             reverse
           />
 
@@ -489,16 +491,16 @@ function Cacamba() {
   return (
     <section id="cacamba" className="bg-charcoal text-cream">
       <div className="grid lg:grid-cols-2">
-        {/* Foto grande, full-bleed no lado */}
-        <Reveal className="ph-zoom relative min-h-[340px] lg:min-h-[560px] border-b lg:border-b-0 lg:border-r border-white/10">
+        {/* Foto grande, full-bleed no lado — detalhe REAL da pintura na caçamba */}
+        <Reveal className="ph-zoom relative min-h-[360px] lg:min-h-[560px] border-b lg:border-b-0 lg:border-r border-white/10">
           <picture>
-            <source srcSet="/mascote/hero-operacao.webp" type="image/webp" />
+            <source srcSet="/mascote/cacamba-logo.webp" type="image/webp" />
             <img
-              src="/mascote/hero-operacao.jpg"
-              alt="Caçamba da Rainha do Entulho no caminhão, em Uruaçu-GO"
-              width="1024" height="1024"
+              src="/mascote/cacamba-logo.jpg"
+              alt="Logotipo da Rainha do Entulho pintado na caçamba: coroa, nome e telefone"
+              width="708" height="568"
               loading="lazy" decoding="async"
-              className="absolute inset-0 w-full h-full object-cover object-[52%_18%]"
+              className="absolute inset-0 w-full h-full object-cover object-[44%_46%]"
             />
           </picture>
         </Reveal>
@@ -603,18 +605,29 @@ const DIFERENCIAIS = [
 
 function PorQue() {
   return (
-    <section id="porque" className="bg-charcoal text-cream">
-      <Container className="py-20 sm:py-24 lg:py-28">
-        <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
-          <Reveal>
+    <section id="porque" className="relative overflow-hidden bg-charcoal text-cream">
+      {/* coroa como assinatura discreta — aparece só aqui */}
+      <img
+        src="/brand/crown.png" alt="" aria-hidden
+        className="pointer-events-none absolute -left-16 -bottom-14 w-[22rem] opacity-[0.05] select-none"
+      />
+      <Container className="relative py-20 sm:py-24 lg:py-28">
+        <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-12 lg:gap-16">
+          <Reveal className="lg:border-r lg:border-white/10 lg:pr-12">
             <Kicker light>A empresa</Kicker>
-            <h2 className="mt-4 font-display uppercase leading-[0.96] text-[2.3rem] sm:text-[3rem]">
+            <h2 className="mt-4 font-display uppercase leading-[0.96] text-[2.4rem] sm:text-[3.1rem]">
               Quem é a<br />Rainha do Entulho
             </h2>
-            <p className="mt-5 max-w-xs text-[0.95rem] leading-relaxed text-cream/60">
-              É uma empresa de Uruaçu, registrada (CNPJ {CNPJ}). A caçamba e o caminhão são
-              nossos, e quem atende é a própria família.
+            <p className="mt-6 max-w-sm text-[0.98rem] leading-relaxed text-cream/70">
+              É uma empresa de Uruaçu que aluga caçamba e faz retirada de entulho. A caçamba e o
+              caminhão são nossos, e quem atende é a própria família.
             </p>
+            <div className="mt-8 inline-flex items-center gap-3 border border-white/15 px-4 py-2.5">
+              <span className="h-2 w-2 bg-red" aria-hidden />
+              <span className="font-head text-[0.72rem] font-bold uppercase tracking-[0.14em] text-cream/70">
+                CNPJ {CNPJ}
+              </span>
+            </div>
           </Reveal>
 
           <Reveal delay={80}>
@@ -656,6 +669,14 @@ const FAQS = [
   {
     q: 'Quanto custa?',
     a: `${PRECO_SEMANAL} ou ${PRECO_MENSAL}. A gente confirma o valor no WhatsApp antes de entregar. Não fazemos aluguel por diária.`,
+  },
+  {
+    q: 'Quanto tempo posso ficar com a caçamba?',
+    a: '7 dias no plano semanal ou 30 dias no mensal. Se precisar de mais tempo, é só avisar que a gente combina.',
+  },
+  {
+    q: 'O que pode ir na caçamba?',
+    a: 'Entulho e resíduo de obra ou reforma — tijolo, concreto, argamassa, cerâmica, madeira, esse tipo de coisa. Material perigoso, químico ou proibido por lei não pode. Na dúvida, fala com a gente antes.',
   },
   {
     q: 'Vocês entregam no meu endereço?',
@@ -732,7 +753,7 @@ function CtaFinal() {
       <Container className="grid lg:grid-cols-[1.25fr_0.75fr] gap-8 items-end">
         <div className="py-16 sm:py-20 lg:py-24">
           <Reveal>
-            <Kicker light>Chama a Rainha</Kicker>
+            <Kicker light>Fala com a gente</Kicker>
             <h2 className="mt-4 font-display uppercase leading-[0.94] text-[2.6rem] sm:text-[3.4rem] lg:text-[3.9rem]">
               Precisou de caçamba?<br />
               <span className="text-gold-light">Chama a Rainha.</span>
