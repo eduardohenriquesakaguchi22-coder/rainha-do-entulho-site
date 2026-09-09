@@ -12,13 +12,14 @@ import {
    A mascote é o único elemento 3D/digital — proposital, aparece em
    3 momentos: HERO, COMO FUNCIONA e CTA FINAL.
    ----------------------------------------------------------------
-   FOTOS — só a foto REAL da caçamba (usada em 2 recortes diferentes):
-     /mascote/cacamba-real.webp   → estabelece a caçamba inteira (Hero)
-     /mascote/cacamba-logo.webp   → detalhe da pintura/logotipo (seção A CAÇAMBA)
-   As cenas CGI (hero-operacao, diferenciais-rainha) NÃO são usadas — pareciam
-   IA e tinham a mascote embutida competindo com o equipamento. Ficam no disco.
-   Quando o cliente enviar fotos reais de entrega/retirada/obra, elas entram
-   nos Serviços e numa Galeria (marcador antes do FAQ).
+   FOTOS
+     /mascote/hero-obra.webp    → cena da caçamba na obra, com a Rainha (HERO)
+                                  — imagem fornecida pelo cliente; já traz a
+                                  personagem, então NÃO usar recorte de mascote aqui.
+     /mascote/cacamba-logo.webp → detalhe REAL da pintura/logotipo (seção A CAÇAMBA)
+   Não usados (ficam no disco): cacamba-real, hero-operacao, diferenciais-rainha.
+   Quando o cliente enviar fotos reais de entrega/retirada, elas entram nos
+   Serviços e numa Galeria (marcador antes do FAQ).
    MASCOTE (recortes com alpha)
      /mascote/rainha-apontando.webp   → HERO (ao lado da caçamba)
      /mascote/rainha-whatsapp.webp    → COMO FUNCIONA (atende pelo WhatsApp)
@@ -291,35 +292,21 @@ function Hero() {
           </Reveal>
         </div>
 
-        {/* Coluna imagem + mascote */}
-        <Reveal delay={140} className="relative lg:pl-14">
+        {/* Coluna imagem — cena da caçamba na obra (já traz a Rainha na foto) */}
+        <Reveal delay={140} className="relative">
           <div className="ph-zoom relative border border-charcoal/12 bg-charcoal">
             <div className="h-1 bg-gold" aria-hidden />
             <picture>
-              <source srcSet="/mascote/cacamba-real.webp" type="image/webp" />
+              <source srcSet="/mascote/hero-obra.webp" type="image/webp" />
               <img
-                src="/mascote/cacamba-real.jpg"
-                alt="Caçamba de 5 m³ da Rainha do Entulho na rua, em Uruaçu-GO"
-                width="1200" height="917"
+                src="/mascote/hero-obra.jpg"
+                alt="Caçamba de 5 m³ da Rainha do Entulho carregada de entulho numa obra em Uruaçu-GO"
+                width="1448" height="1086"
                 fetchPriority="high" decoding="async"
-                className="w-full aspect-[5/4] object-cover object-[56%_44%]"
+                className="w-full aspect-[4/3] object-cover object-[50%_46%]"
               />
             </picture>
-            <div className="absolute right-0 bottom-0 bg-charcoal text-cream px-4 py-2.5 text-right">
-              <span className="block font-head text-[0.56rem] font-bold uppercase tracking-[0.16em] text-gold-light">Nossa caçamba</span>
-              <span className="block font-head font-extrabold text-[0.82rem] leading-tight">{CACAMBA_M3} · Uruaçu-GO</span>
-            </div>
-          </div>
-          {/* Mascote ao lado da foto — secundária ao equipamento, pés na mesma base, não flutua */}
-          <div className="pointer-events-none absolute left-0 sm:-left-7 lg:-left-3 bottom-0 w-[27%] sm:w-[24%] max-w-[140px]">
-            <div className="absolute inset-x-1 -bottom-1 h-3 rounded-[50%] bg-charcoal/25 blur-md" aria-hidden />
-            <img
-              src="/mascote/rainha-apontando.webp"
-              alt="A Rainha do Entulho, a mascote da empresa, ao lado da caçamba"
-              width="364" height="688"
-              loading="lazy" decoding="async"
-              className="relative w-full h-auto object-contain drop-shadow-[0_16px_22px_rgba(0,0,0,0.26)]"
-            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/25 via-transparent to-transparent" aria-hidden />
           </div>
         </Reveal>
       </Container>
