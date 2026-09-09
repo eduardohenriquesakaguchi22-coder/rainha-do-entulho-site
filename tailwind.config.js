@@ -11,8 +11,8 @@ export default {
     },
     container: {
       center: true,
-      padding: { DEFAULT: "1.25rem", sm: "2rem", lg: "3rem" },
-      screens: { xl: "1320px" },
+      padding: { DEFAULT: "1.25rem", sm: "2rem", lg: "3.5rem" },
+      screens: { xl: "1440px" },
     },
     extend: {
       colors: {

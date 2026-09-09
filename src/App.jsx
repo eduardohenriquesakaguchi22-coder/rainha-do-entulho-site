@@ -50,6 +50,7 @@ const WA_ORCAMENTO = wa('Oi! Vim pelo site e quero um orçamento. Já mando o en
 const WA_REGIAO = wa('Oi! Vim pelo site. Vocês entregam no meu endereço? Já mando a localização.')
 
 const NAV_LINKS = [
+  { label: 'Início', href: '#topo' },
   { label: 'Serviços', href: '#servicos' },
   { label: 'A caçamba', href: '#cacamba' },
   { label: 'Como funciona', href: '#como-funciona' },
@@ -62,7 +63,32 @@ const NAV_LINKS = [
    ================================================================ */
 
 function Container({ className = '', children, as: Tag = 'div' }) {
-  return <Tag className={`mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12 ${className}`}>{children}</Tag>
+  return <Tag className={`mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-14 ${className}`}>{children}</Tag>
+}
+
+/* parallax leve pra imagens grandes — transform-only, respeita reduced-motion */
+function useParallax(strength = 0.06) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (window.innerWidth < 1024) return
+    let raf = 0
+    const onScroll = () => {
+      if (raf) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        const rect = el.getBoundingClientRect()
+        const mid = rect.top + rect.height / 2 - window.innerHeight / 2
+        el.style.transform = `translate3d(0, ${(-mid * strength).toFixed(1)}px, 0)`
+      })
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf) }
+  }, [strength])
+  return ref
 }
 
 const BTN_BASE =
@@ -199,18 +225,18 @@ function Header() {
   return (
     <header className="sticky top-0 z-50">
       <TopStrip />
-      <div className={`border-b transition-colors duration-300 ${scrolled ? 'bg-cream/95 backdrop-blur border-line' : 'bg-cream border-line/60'}`}>
-        <Container className="flex h-16 lg:h-[4.5rem] items-center justify-between gap-6">
+      <div className={`border-b transition-all duration-300 ${scrolled ? 'bg-cream/95 backdrop-blur border-line shadow-[0_1px_16px_-8px_rgba(44,44,44,0.35)]' : 'bg-cream border-line/50'}`}>
+        <Container className={`flex items-center justify-between gap-8 transition-all duration-300 ${scrolled ? 'h-16 lg:h-[4.25rem]' : 'h-16 lg:h-[5rem]'}`}>
           <Logo />
-          <nav className="hidden lg:flex items-center gap-8" aria-label="Navegação principal">
+          <nav className="hidden lg:flex items-center gap-9" aria-label="Navegação principal">
             {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="nav-underline font-head text-[0.8rem] font-semibold uppercase tracking-[0.06em] text-charcoal/80 hover:text-charcoal">
+              <a key={l.href} href={l.href} className="nav-underline font-head text-[0.82rem] font-semibold uppercase tracking-[0.07em] text-charcoal/75 hover:text-charcoal">
                 {l.label}
               </a>
             ))}
           </nav>
           <div className="hidden lg:block">
-            <Button href={WA_ORCAMENTO} variant="primary" size="md" icon={ArrowUpRight}>Pedir orçamento</Button>
+            <Button href={WA_ORCAMENTO} variant="primary" size="md" icon={ArrowUpRight}>Solicitar orçamento</Button>
           </div>
           <button
             className="lg:hidden inline-flex items-center justify-center w-11 h-11 text-charcoal"
@@ -239,7 +265,7 @@ function Header() {
               </a>
             ))}
             <Button href={WA_ORCAMENTO} variant="primary" size="lg" icon={ArrowUpRight} className="mt-6 w-full">
-              Pedir orçamento
+              Solicitar orçamento
             </Button>
           </nav>
         </div>
@@ -253,39 +279,40 @@ function Header() {
    ================================================================ */
 
 function Hero() {
+  const imgRef = useParallax(0.05)
   return (
     <section id="topo" className="relative bg-cream">
-      <Container className="grid lg:grid-cols-[1.02fr_0.98fr] gap-10 lg:gap-14 items-center py-14 sm:py-20 lg:py-24">
+      <Container className="grid lg:grid-cols-[0.92fr_1.08fr] gap-10 lg:gap-16 items-center py-16 sm:py-24 lg:py-28 lg:min-h-[calc(100vh-8rem)]">
         {/* Coluna texto */}
-        <div className="max-w-xl">
+        <div className="max-w-2xl">
           <Reveal><Kicker>Caçamba de entulho · {REGIAO}</Kicker></Reveal>
           <Reveal delay={60}>
-            <h1 className="mt-5 font-display uppercase text-charcoal leading-[0.94] text-[2.6rem] sm:text-[3.6rem] lg:text-[4.1rem]">
+            <h1 className="mt-6 font-display uppercase text-charcoal leading-[1.13] text-[2.6rem] sm:text-[3.5rem] lg:text-[4rem]">
               Caçamba de entulho<br />pra sua obra<br /><span className="text-red">em Uruaçu.</span>
             </h1>
           </Reveal>
           <Reveal delay={120}>
-            <p className="mt-6 max-w-prose2 text-[1.02rem] leading-relaxed text-ink-soft">
+            <p className="mt-7 max-w-prose2 text-[1.05rem] leading-relaxed text-ink-soft">
               A gente aluga caçamba de {CACAMBA_M3} por semana ou por mês. Leva até a obra,
               busca quando você terminar, e passa o preço antes no WhatsApp.
             </p>
           </Reveal>
           <Reveal delay={180}>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-9 flex flex-wrap gap-3">
               <Button href={WA_CACAMBA} variant="primary" size="lg">Pedir uma caçamba</Button>
               <Button href="#como-funciona" variant="outline" size="lg" icon={ArrowRight}>Ver como funciona</Button>
             </div>
           </Reveal>
           <Reveal delay={240}>
-            <dl className="mt-10 grid grid-cols-3 gap-px bg-line border-y border-line">
+            <dl className="mt-12 grid grid-cols-3 gap-px bg-line border-y border-line">
               {[
                 ['Tamanho', CACAMBA_M3],
                 ['Aluguel', 'Semana ou mês'],
                 ['Atende', 'Uruaçu-GO'],
               ].map(([k, v]) => (
-                <div key={k} className="bg-cream px-1 py-3">
+                <div key={k} className="bg-cream px-1 py-4">
                   <dt className="font-head text-[0.62rem] font-bold uppercase tracking-[0.14em] text-ink-soft">{k}</dt>
-                  <dd className="mt-1 font-head font-extrabold text-[0.95rem] text-charcoal">{v}</dd>
+                  <dd className="mt-1.5 font-head font-extrabold text-[1rem] text-charcoal">{v}</dd>
                 </div>
               ))}
             </dl>
@@ -293,20 +320,21 @@ function Hero() {
         </div>
 
         {/* Coluna imagem — cena da caçamba na obra (já traz a Rainha na foto) */}
-        <Reveal delay={140} className="relative">
-          <div className="ph-zoom relative border border-charcoal/12 bg-charcoal">
-            <div className="h-1 bg-gold" aria-hidden />
-            <picture>
+        <Reveal delay={140} className="relative aspect-[4/3] lg:aspect-auto lg:h-[38rem] xl:h-[42rem]">
+          <div className="ph-zoom absolute inset-0 border border-charcoal/12 bg-charcoal overflow-hidden">
+            <div className="absolute top-0 inset-x-0 h-1 bg-gold z-10" aria-hidden />
+            <picture className="absolute inset-0 block">
               <source srcSet="/mascote/hero-obra.webp" type="image/webp" />
               <img
+                ref={imgRef}
                 src="/mascote/hero-obra.jpg"
                 alt="Caçamba de 5 m³ da Rainha do Entulho carregada de entulho numa obra em Uruaçu-GO"
                 width="1448" height="1086"
                 fetchPriority="high" decoding="async"
-                className="w-full aspect-[4/3] object-cover object-[50%_46%]"
+                className="absolute inset-x-0 -top-[7%] h-[114%] w-full object-cover object-[50%_45%] will-change-transform"
               />
             </picture>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/25 via-transparent to-transparent" aria-hidden />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/30 via-transparent to-transparent" aria-hidden />
           </div>
         </Reveal>
       </Container>
@@ -340,11 +368,11 @@ function TrustBar() {
           <Reveal
             key={n}
             delay={i * 60}
-            className={`py-7 lg:py-8 lg:px-8 lg:first:pl-0 lg:last:pr-0 ${TRUST_BORDERS[i]}`}
+            className={`py-9 lg:py-11 lg:px-10 lg:first:pl-0 lg:last:pr-0 ${TRUST_BORDERS[i]}`}
           >
-            <span className="font-display text-[0.95rem] text-gold-light/70 tabular-nums">{n}</span>
-            <h3 className="mt-1.5 font-head font-extrabold text-[0.98rem]">{title}</h3>
-            <p className="mt-1 text-[0.8rem] leading-snug text-cream/55">{text}</p>
+            <span className="font-display text-[1rem] text-gold-light/60 tabular-nums">{n}</span>
+            <h3 className="mt-2 font-head font-extrabold text-[1.02rem]">{title}</h3>
+            <p className="mt-1.5 text-[0.82rem] leading-snug text-cream/55">{text}</p>
           </Reveal>
         ))}
       </Container>
@@ -363,13 +391,13 @@ function ServiceRow({ n, title, text, spec, cta, href, image, imageAlt, reverse,
     >
       {/* Bloco texto */}
       <div className={reverse ? 'lg:order-2' : ''}>
-        <div className="flex items-baseline gap-4">
-          <span className={`font-display text-[2.4rem] leading-none tabular-nums ${dark ? 'text-gold-light/40' : 'text-red/20'}`}>{n}</span>
-          <h3 className={`font-display uppercase leading-[0.98] text-[1.8rem] sm:text-[2.1rem] ${dark ? 'text-cream' : 'text-charcoal'}`}>{title}</h3>
+        <div className="flex items-baseline gap-5">
+          <span className={`font-display text-[3rem] sm:text-[3.4rem] leading-none tabular-nums ${dark ? 'text-gold-light/30' : 'text-red/15'}`}>{n}</span>
+          <h3 className={`font-display uppercase leading-[1.0] text-[2rem] sm:text-[2.5rem] ${dark ? 'text-cream' : 'text-charcoal'}`}>{title}</h3>
         </div>
-        <p className={`mt-4 max-w-md text-[0.98rem] leading-relaxed ${dark ? 'text-cream/70' : 'text-ink-soft'}`}>{text}</p>
+        <p className={`mt-5 max-w-lg text-[1.02rem] leading-relaxed ${dark ? 'text-cream/70' : 'text-ink-soft'}`}>{text}</p>
         {spec && (
-          <ul className={`mt-5 flex flex-wrap gap-x-6 gap-y-2 text-[0.82rem] font-head font-semibold ${dark ? 'text-cream/80' : 'text-charcoal'}`}>
+          <ul className={`mt-6 flex flex-wrap gap-x-7 gap-y-2 text-[0.85rem] font-head font-semibold ${dark ? 'text-cream/80' : 'text-charcoal'}`}>
             {spec.map((s) => (
               <li key={s} className="inline-flex items-center gap-1.5">
                 <Check size={14} strokeWidth={3} className={dark ? 'text-gold-light' : 'text-red'} aria-hidden />{s}
@@ -380,9 +408,9 @@ function ServiceRow({ n, title, text, spec, cta, href, image, imageAlt, reverse,
         <a
           href={href}
           target="_blank" rel="noopener noreferrer"
-          className={`mt-6 inline-flex items-center gap-2 font-head font-bold uppercase tracking-[0.06em] text-[0.78rem] ${dark ? 'text-gold-light hover:text-cream' : 'text-red hover:text-red-dark'} transition-colors`}
+          className={`group/link mt-7 inline-flex items-center gap-2 font-head font-bold uppercase tracking-[0.07em] text-[0.8rem] ${dark ? 'text-gold-light hover:text-cream' : 'text-red hover:text-red-dark'} transition-colors`}
         >
-          {cta} <ArrowRight size={15} strokeWidth={2.8} className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
+          {cta} <ArrowRight size={15} strokeWidth={2.8} className="transition-transform duration-200 group-hover/link:translate-x-1" aria-hidden />
         </a>
       </div>
 
@@ -397,8 +425,8 @@ function ServiceRow({ n, title, text, spec, cta, href, image, imageAlt, reverse,
       )}
       {/* Sem imagem: bloco tipográfico */}
       {!image && (
-        <div className={`border-l-2 pl-6 lg:pl-10 py-2 ${dark ? 'border-gold-light/40' : 'border-red/30'} ${reverse ? 'lg:order-1' : ''}`}>
-          <p className={`font-display uppercase leading-[1.02] text-[1.5rem] sm:text-[1.9rem] ${dark ? 'text-cream/90' : 'text-charcoal/85'}`}>
+        <div className={`border-l-2 pl-7 lg:pl-12 py-3 ${dark ? 'border-gold-light/40' : 'border-red/30'} ${reverse ? 'lg:order-1' : ''}`}>
+          <p className={`font-display uppercase leading-[1.02] text-[1.7rem] sm:text-[2.3rem] ${dark ? 'text-cream/90' : 'text-charcoal/80'}`}>
             {spec && spec.length
               ? spec.join(' · ')
               : 'Uma conversa de WhatsApp resolve.'}
@@ -413,12 +441,12 @@ function Servicos() {
   return (
     <section id="servicos" className="bg-cream">
       <Container className="py-20 sm:py-24 lg:py-28">
-        <Reveal className="max-w-2xl">
+        <Reveal className="max-w-3xl">
           <Kicker>O que a gente faz</Kicker>
-          <h2 className="mt-4 font-display uppercase text-charcoal leading-[0.98] text-[2.3rem] sm:text-[3rem]">
+          <h2 className="mt-5 font-display uppercase text-charcoal leading-[1.0] text-[2.5rem] sm:text-[3.2rem] lg:text-[3.6rem]">
             Aluguel de caçamba e retirada de entulho
           </h2>
-          <p className="mt-4 text-[1rem] leading-relaxed text-ink-soft">
+          <p className="mt-6 text-[1.05rem] leading-relaxed text-ink-soft">
             A caçamba é uma só, de {CACAMBA_M3}. O que muda é quanto tempo você fica com ela
             e o que você precisa que a gente faça.
           </p>
@@ -427,7 +455,7 @@ function Servicos() {
         {/* Sem imagem por serviço: os números 01/02/03 + tipografia forte
             separam os serviços. Quando o cliente enviar fotos reais de
             entrega e de retirada, dá pra colocar uma foto grande por linha. */}
-        <div className="mt-14 lg:mt-16 space-y-16 lg:space-y-20">
+        <div className="mt-12 lg:mt-14 space-y-14 lg:space-y-16">
           <ServiceRow
             n="01"
             title="Aluguel de caçamba"
@@ -477,9 +505,9 @@ const SPECS = [
 function Cacamba() {
   return (
     <section id="cacamba" className="bg-charcoal text-cream">
-      <div className="grid lg:grid-cols-2">
+      <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
         {/* Foto grande, full-bleed no lado — detalhe REAL da pintura na caçamba */}
-        <Reveal className="ph-zoom relative min-h-[360px] lg:min-h-[560px] border-b lg:border-b-0 lg:border-r border-white/10">
+        <Reveal className="ph-zoom relative min-h-[360px] lg:min-h-[540px] border-b lg:border-b-0 lg:border-r border-white/10">
           <picture>
             <source srcSet="/mascote/cacamba-logo.webp" type="image/webp" />
             <img
@@ -493,26 +521,26 @@ function Cacamba() {
         </Reveal>
 
         {/* Especificações */}
-        <Reveal delay={80} className="px-5 sm:px-10 lg:px-16 py-16 lg:py-20">
+        <Reveal delay={80} className="px-5 sm:px-10 lg:px-20 py-16 lg:py-20">
           <Kicker light>A caçamba</Kicker>
-          <h2 className="mt-4 font-display uppercase leading-[0.98] text-[2.2rem] sm:text-[2.8rem]">
+          <h2 className="mt-5 font-display uppercase leading-[1.0] text-[2.4rem] sm:text-[3rem]">
             Como é a caçamba
           </h2>
-          <p className="mt-4 max-w-md text-[0.98rem] leading-relaxed text-cream/70">
+          <p className="mt-6 max-w-md text-[1.02rem] leading-relaxed text-cream/70">
             É a caçamba de metal de sempre, de {CACAMBA_M3}. Quem leva e busca é a gente, no nosso
             caminhão. Você não passa por intermediário.
           </p>
 
-          <dl className="mt-9 divide-y divide-white/10 border-y border-white/10">
+          <dl className="mt-10 divide-y divide-white/10 border-y border-white/10">
             {SPECS.map(([k, v]) => (
-              <div key={k} className="grid grid-cols-[9rem_1fr] sm:grid-cols-[11rem_1fr] gap-4 py-3.5">
+              <div key={k} className="grid grid-cols-[9rem_1fr] sm:grid-cols-[12rem_1fr] gap-4 py-4">
                 <dt className="font-head text-[0.68rem] font-bold uppercase tracking-[0.14em] text-cream/50">{k}</dt>
-                <dd className="font-head font-semibold text-[0.9rem] text-cream tabular-nums">{v}</dd>
+                <dd className="font-head font-semibold text-[0.92rem] text-cream tabular-nums">{v}</dd>
               </div>
             ))}
           </dl>
 
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-10 flex flex-wrap gap-3">
             <Button href={WA_CACAMBA} variant="gold" size="lg">Pedir a caçamba</Button>
             <Button href={WA_REGIAO} variant="outline-light" size="lg" icon={MapPin} iconRight={false}>Ver se atende meu endereço</Button>
           </div>
@@ -537,20 +565,20 @@ function ComoFunciona() {
   return (
     <section id="como-funciona" className="bg-cream">
       <Container className="py-20 sm:py-24 lg:py-28">
-        <Reveal className="max-w-2xl">
+        <Reveal className="max-w-3xl">
           <Kicker>Como funciona</Kicker>
-          <h2 className="mt-4 font-display uppercase text-charcoal leading-[0.98] text-[2.3rem] sm:text-[3rem]">
+          <h2 className="mt-5 font-display uppercase text-charcoal leading-[0.96] text-[2.6rem] sm:text-[3.4rem] lg:text-[3.9rem]">
             Como pedir a caçamba
           </h2>
-          <p className="mt-4 text-[1rem] leading-relaxed text-ink-soft">
+          <p className="mt-6 text-[1.05rem] leading-relaxed text-ink-soft">
             Não tem visita técnica nem proposta demorada. Você chama no WhatsApp e a gente
             resolve por lá.
           </p>
         </Reveal>
 
-        <div className="mt-12 lg:mt-14 grid lg:grid-cols-[0.62fr_1.38fr] gap-10 lg:gap-14 items-end">
+        <div className="mt-12 lg:mt-14 grid lg:grid-cols-[0.55fr_1.45fr] gap-10 lg:gap-14 items-end">
           {/* Mascote — apoiada na base, ajuda a explicar */}
-          <div className="relative hidden lg:block w-[62%] max-w-[190px] mx-auto lg:mx-0">
+          <div className="relative hidden lg:block w-[58%] max-w-[200px] mx-auto lg:mx-0">
             <div className="absolute inset-x-3 -bottom-1 h-3 rounded-[50%] bg-charcoal/20 blur-md" aria-hidden />
             <img
               src="/mascote/rainha-whatsapp.webp"
@@ -564,11 +592,11 @@ function ComoFunciona() {
           {/* Etapas */}
           <ol className="divide-y divide-line border-y border-line">
             {STEPS.map(([n, title, text], i) => (
-              <Reveal as="li" key={n} delay={i * 70} className="grid grid-cols-[3.5rem_1fr] sm:grid-cols-[5rem_1fr] gap-4 py-6">
-                <span className="font-display text-[2.3rem] sm:text-[2.9rem] leading-none text-red/25 tabular-nums">{n}</span>
-                <div className="pt-1">
-                  <h3 className="font-head font-extrabold text-[1.05rem] text-charcoal uppercase tracking-[0.02em]">{title}</h3>
-                  <p className="mt-1.5 text-[0.92rem] leading-relaxed text-ink-soft">{text}</p>
+              <Reveal as="li" key={n} delay={i * 70} className="grid grid-cols-[3.5rem_1fr] sm:grid-cols-[6rem_1fr] gap-5 py-6 lg:py-7">
+                <span className="font-display text-[2.6rem] sm:text-[3.4rem] leading-none text-red/20 tabular-nums">{n}</span>
+                <div className="pt-1.5">
+                  <h3 className="font-head font-extrabold text-[1.15rem] text-charcoal uppercase tracking-[0.02em]">{title}</h3>
+                  <p className="mt-2 text-[0.96rem] leading-relaxed text-ink-soft">{text}</p>
                 </div>
               </Reveal>
             ))}
@@ -584,10 +612,10 @@ function ComoFunciona() {
    ================================================================ */
 
 const DIFERENCIAIS = [
-  ['Negócio de família', 'Você fala com quem trabalha na empresa, não com atendente de central.'],
-  ['O preço a gente combina antes', 'Você sabe quanto vai pagar no WhatsApp, antes da caçamba chegar.'],
-  ['Você escolhe o prazo', 'Fica com a caçamba por uma semana ou por um mês. A retirada é quando você avisar.'],
-  ['A caçamba e o caminhão são nossos', 'A gente não repassa pra terceiro. Quem entrega e busca é a Rainha do Entulho.'],
+  ['Negócio de família', 'Você fala com quem trabalha na empresa, não com central de atendimento.'],
+  ['Preço combinado antes', 'Você sabe quanto vai pagar no WhatsApp, antes da caçamba chegar.'],
+  ['No seu prazo', 'Uma semana ou um mês. A retirada acontece quando você avisar.'],
+  ['Caminhão próprio', 'A gente não repassa pra terceiro. Quem entrega e busca é a Rainha.'],
 ]
 
 function PorQue() {
@@ -596,37 +624,39 @@ function PorQue() {
       {/* coroa como assinatura discreta — aparece só aqui */}
       <img
         src="/brand/crown.png" alt="" aria-hidden
-        className="pointer-events-none absolute -left-16 -bottom-14 w-[22rem] opacity-[0.05] select-none"
+        className="pointer-events-none absolute -right-24 -bottom-20 w-[26rem] opacity-[0.05] select-none"
       />
       <Container className="relative py-20 sm:py-24 lg:py-28">
-        <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-12 lg:gap-16">
-          <Reveal className="lg:border-r lg:border-white/10 lg:pr-12">
+        <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-start">
+          <Reveal>
             <Kicker light>A empresa</Kicker>
-            <h2 className="mt-4 font-display uppercase leading-[0.96] text-[2.4rem] sm:text-[3.1rem]">
+            <h2 className="mt-5 font-display uppercase leading-[1.0] text-[2.6rem] sm:text-[3.3rem] lg:text-[3.7rem]">
               Quem é a<br />Rainha do Entulho
             </h2>
-            <p className="mt-6 max-w-sm text-[0.98rem] leading-relaxed text-cream/70">
+          </Reveal>
+          <Reveal delay={80} className="lg:pt-3">
+            <p className="max-w-md text-[1.05rem] leading-relaxed text-cream/70">
               É uma empresa de Uruaçu que aluga caçamba e faz retirada de entulho. A caçamba e o
               caminhão são nossos, e quem atende é a própria família.
             </p>
-            <div className="mt-8 inline-flex items-center gap-3 border border-white/15 px-4 py-2.5">
+            <div className="mt-7 inline-flex items-center gap-3 border border-white/15 px-4 py-2.5">
               <span className="h-2 w-2 bg-red" aria-hidden />
               <span className="font-head text-[0.72rem] font-bold uppercase tracking-[0.14em] text-cream/70">
                 CNPJ {CNPJ}
               </span>
             </div>
           </Reveal>
+        </div>
 
-          <Reveal delay={80}>
-            <dl className="divide-y divide-white/10 border-y border-white/10">
-              {DIFERENCIAIS.map(([title, text]) => (
-                <div key={title} className="py-6 grid sm:grid-cols-[16rem_1fr] gap-2 sm:gap-6">
-                  <dt className="font-display uppercase text-[1.1rem] text-gold-light leading-tight">{title}</dt>
-                  <dd className="text-[0.95rem] leading-relaxed text-cream/70">{text}</dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
+        {/* Diferenciais — bloco de 4 colunas, estilo ficha */}
+        <div className="mt-14 lg:mt-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10">
+          {DIFERENCIAIS.map(([title, text], i) => (
+            <Reveal key={title} delay={i * 60} className="bg-charcoal p-7 lg:p-9">
+              <span className="font-display text-[0.9rem] text-gold-light/50 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="mt-3 font-display uppercase text-[1.25rem] leading-tight text-gold-light">{title}</h3>
+              <p className="mt-3 text-[0.92rem] leading-relaxed text-cream/65">{text}</p>
+            </Reveal>
+          ))}
         </div>
       </Container>
     </section>
@@ -703,14 +733,14 @@ function FAQItem({ q, a, open, onToggle, id }) {
 function FAQ() {
   const [open, setOpen] = useState(0)
   return (
-    <section className="bg-cream">
-      <Container className="py-16 sm:py-20 lg:py-24 grid lg:grid-cols-[0.7fr_1.3fr] gap-10 lg:gap-16">
+    <section className="bg-cream border-t border-line">
+      <Container className="py-20 sm:py-24 lg:py-28 grid lg:grid-cols-[0.65fr_1.35fr] gap-12 lg:gap-20">
         <Reveal>
           <Kicker>Dúvidas</Kicker>
-          <h2 className="mt-4 font-display uppercase text-charcoal leading-[0.98] text-[2.1rem] sm:text-[2.6rem]">
+          <h2 className="mt-5 font-display uppercase text-charcoal leading-[0.96] text-[2.4rem] sm:text-[3rem]">
             Perguntas<br />frequentes
           </h2>
-          <p className="mt-4 text-[0.92rem] text-ink-soft">
+          <p className="mt-5 text-[0.95rem] text-ink-soft">
             Ficou com outra dúvida?{' '}
             <a href={WA_GERAL} target="_blank" rel="noopener noreferrer" className="font-semibold text-red underline underline-offset-2 hover:text-red-dark">
               Chama no WhatsApp.
@@ -737,18 +767,18 @@ function CtaFinal() {
   return (
     <section id="contato" className="relative overflow-hidden bg-red text-cream">
       <div className="h-1 edge-gold opacity-90" aria-hidden />
-      <Container className="grid lg:grid-cols-[1.25fr_0.75fr] gap-8 items-end">
+      <Container className="grid lg:grid-cols-[1.3fr_0.7fr] gap-8 items-end">
         <div className="py-16 sm:py-20 lg:py-24">
           <Reveal>
             <Kicker light>Fala com a gente</Kicker>
-            <h2 className="mt-4 font-display uppercase leading-[0.94] text-[2.6rem] sm:text-[3.4rem] lg:text-[3.9rem]">
+            <h2 className="mt-5 font-display uppercase leading-[1.0] text-[2.7rem] sm:text-[3.5rem] lg:text-[4.1rem]">
               Precisou de caçamba?<br />
               <span className="text-gold-light">Chama a Rainha.</span>
             </h2>
-            <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-cream/85">
+            <p className="mt-6 max-w-md text-[1.02rem] leading-relaxed text-cream/85">
               Manda uma mensagem que a gente já passa o preço e combina a entrega.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
               <Button href={WA_CACAMBA} variant="gold" size="lg" icon={MessageCircle} iconRight={false}>
                 Pedir pelo WhatsApp
               </Button>
@@ -788,7 +818,7 @@ function CtaFinal() {
 function Footer() {
   return (
     <footer className="bg-charcoal text-cream/70">
-      <Container className="py-14 grid gap-10 md:grid-cols-[1.6fr_1fr_1.3fr]">
+      <Container className="py-16 lg:py-20 grid gap-12 md:grid-cols-[1.6fr_1fr_1.3fr]">
         <div>
           <Logo light />
           <p className="mt-4 max-w-xs text-[0.86rem] leading-relaxed">
