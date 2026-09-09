@@ -13,9 +13,9 @@ import {
    3 momentos: HERO, COMO FUNCIONA e CTA FINAL.
    ----------------------------------------------------------------
    FOTOS
-     /mascote/hero-obra.webp    → cena da caçamba na obra, com a Rainha (HERO)
-                                  — imagem fornecida pelo cliente; já traz a
-                                  personagem, então NÃO usar recorte de mascote aqui.
+     /mascote/hero-obra.webp    → cena da mascote 3D apresentando a caçamba na
+                                  obra (HERO) — imagem fornecida pelo cliente; já
+                                  traz a personagem, então NÃO usar recorte aqui.
      /mascote/cacamba-logo.webp → detalhe REAL da pintura/logotipo (seção A CAÇAMBA)
    Não usados (ficam no disco): cacamba-real, hero-operacao, diferenciais-rainha.
    Quando o cliente enviar fotos reais de entrega/retirada, elas entram nos
