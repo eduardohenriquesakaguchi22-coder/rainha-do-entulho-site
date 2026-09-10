@@ -17,7 +17,7 @@ export default {
     extend: {
       colors: {
         // Primária
-        red: { DEFAULT: "#B51731", dark: "#8B1226", deep: "#6E0F1F" },
+        red: { DEFAULT: "#B51731", dark: "#8B1226", deep: "#6E0F1F", crimson: "#9C0E1F" },
         // Secundária / realeza
         gold: { DEFAULT: "#C19A6B", dark: "#9A7A4E", light: "#DAC19B" },
         // Estrutura

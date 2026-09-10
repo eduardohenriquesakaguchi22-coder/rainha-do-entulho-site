@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   MessageCircle, Phone, MapPin, ArrowRight, ArrowUpRight, Check,
-  ChevronDown, Menu, X, Instagram,
+  ChevronDown, Menu, X, Instagram, Truck, Recycle, RefreshCw, CheckCircle2,
+  Users, Tag, Clock,
 } from 'lucide-react'
 
 /* ================================================================
@@ -331,7 +332,7 @@ function Hero() {
                 alt="Caçamba de 5 m³ da Rainha do Entulho carregada de entulho numa obra em Uruaçu-GO"
                 width="1448" height="1086"
                 fetchPriority="high" decoding="async"
-                className="absolute inset-x-0 -top-[7%] h-[114%] w-full object-cover object-[50%_45%] will-change-transform"
+                className="absolute inset-x-0 -top-[2%] h-[104%] w-full object-cover object-[50%_50%] will-change-transform"
               />
             </picture>
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/30 via-transparent to-transparent" aria-hidden />
@@ -381,65 +382,110 @@ function TrustBar() {
 }
 
 /* ================================================================
-   SERVIÇOS — apresentação editorial, numerada
+   SERVIÇOS — cards editoriais, numerados, com cor de destaque
    ================================================================ */
 
-function ServiceRow({ n, title, text, spec, cta, href, image, imageAlt, reverse, dark }) {
+const SERVICE_ACCENTS = {
+  red: {
+    bar: 'bg-red', num: 'text-red/15', icon: 'bg-red/10 text-red',
+    chip: 'bg-red/[0.07] text-red-dark ring-1 ring-red/15',
+    btn: 'bg-red text-cream hover:bg-red-dark',
+  },
+  gold: {
+    bar: 'bg-gold-dark', num: 'text-gold-dark/20', icon: 'bg-gold/15 text-gold-dark',
+    chip: 'bg-gold/[0.12] text-gold-dark ring-1 ring-gold/25',
+    btn: 'bg-gold-dark text-cream hover:bg-red-dark',
+  },
+  charcoal: {
+    bar: 'bg-charcoal', num: 'text-charcoal/10', icon: 'bg-charcoal/8 text-charcoal',
+    chip: 'bg-charcoal/[0.05] text-charcoal ring-1 ring-charcoal/15',
+    btn: 'bg-charcoal text-cream hover:bg-red-dark',
+  },
+}
+
+const SERVICOS = [
+  {
+    n: '01',
+    icon: Truck,
+    accent: 'red',
+    title: 'Aluguel de caçamba',
+    text: 'A gente leva a caçamba de 5 m³ até você e busca no fim do prazo. Serve pra reforma, obra, demolição ou aquela limpeza de quintal que junta muito entulho.',
+    spec: [PRECO_SEMANAL, PRECO_MENSAL],
+    cta: 'Pedir no WhatsApp',
+    href: WA_CACAMBA,
+  },
+  {
+    n: '02',
+    icon: Recycle,
+    accent: 'gold',
+    title: 'Retirada de entulho',
+    text: 'Encheu a caçamba? A gente busca, tira o material da frente e leva pro lugar certo. Vale pra obra, reforma, demolição e limpeza de terreno.',
+    spec: ['Obra e reforma', 'Demolição', 'Limpeza de terreno'],
+    cta: 'Falar com a gente',
+    href: WA_GERAL,
+  },
+  {
+    n: '03',
+    icon: RefreshCw,
+    accent: 'charcoal',
+    title: 'Troca de caçamba',
+    text: 'Se a obra é longa e a caçamba enche antes do prazo, a gente vem, tira a cheia e deixa uma vazia no lugar. Você não para a obra.',
+    spec: ['Caminhão é nosso', 'Sem intermediário'],
+    cta: 'Combinar a troca',
+    href: WA_GERAL,
+  },
+]
+
+function ServiceCard({ n, icon: Icon, accent, title, text, spec, cta, href, delay }) {
+  const a = SERVICE_ACCENTS[accent]
   return (
     <Reveal
-      className={`grid gap-8 lg:gap-14 items-center ${image ? 'lg:grid-cols-2' : 'lg:grid-cols-[0.9fr_1.1fr]'} ${dark ? 'text-cream' : ''}`}
+      delay={delay}
+      className="group relative flex flex-col bg-white rounded-card shadow-card ring-1 ring-charcoal/8 overflow-hidden transition-all duration-300 ease-smooth hover:shadow-lift hover:-translate-y-1.5"
     >
-      {/* Bloco texto */}
-      <div className={reverse ? 'lg:order-2' : ''}>
-        <div className="flex items-baseline gap-5">
-          <span className={`font-display text-[3rem] sm:text-[3.4rem] leading-none tabular-nums ${dark ? 'text-gold-light/30' : 'text-red/15'}`}>{n}</span>
-          <h3 className={`font-display uppercase leading-[1.0] text-[2rem] sm:text-[2.5rem] ${dark ? 'text-cream' : 'text-charcoal'}`}>{title}</h3>
+      <span className={`absolute inset-x-0 top-0 h-[5px] ${a.bar}`} aria-hidden />
+
+      <div className="flex flex-col grow p-7 sm:p-8">
+        <div className="flex items-start justify-between">
+          <span className={`inline-flex items-center justify-center w-12 h-12 rounded-card ${a.icon}`}>
+            <Icon size={22} strokeWidth={2.2} aria-hidden />
+          </span>
+          <span className={`font-display text-[3.4rem] leading-none tabular-nums ${a.num}`} aria-hidden>{n}</span>
         </div>
-        <p className={`mt-5 max-w-lg text-[1.02rem] leading-relaxed ${dark ? 'text-cream/70' : 'text-ink-soft'}`}>{text}</p>
+
+        <h3 className="mt-6 font-display uppercase leading-[1.0] text-[1.7rem] sm:text-[1.85rem] text-charcoal">
+          {title}
+        </h3>
+        <p className="mt-4 text-[0.98rem] leading-relaxed text-ink-soft">{text}</p>
+
         {spec && (
-          <ul className={`mt-6 flex flex-wrap gap-x-7 gap-y-2 text-[0.85rem] font-head font-semibold ${dark ? 'text-cream/80' : 'text-charcoal'}`}>
+          <ul className="mt-6 flex flex-wrap gap-2">
             {spec.map((s) => (
-              <li key={s} className="inline-flex items-center gap-1.5">
-                <Check size={14} strokeWidth={3} className={dark ? 'text-gold-light' : 'text-red'} aria-hidden />{s}
+              <li key={s} className={`inline-flex items-center gap-1.5 rounded-card px-3 py-1.5 text-[0.78rem] font-head font-semibold ${a.chip}`}>
+                <Check size={13} strokeWidth={3} aria-hidden />{s}
               </li>
             ))}
           </ul>
         )}
+
         <a
           href={href}
           target="_blank" rel="noopener noreferrer"
-          className={`group/link mt-7 inline-flex items-center gap-2 font-head font-bold uppercase tracking-[0.07em] text-[0.8rem] ${dark ? 'text-gold-light hover:text-cream' : 'text-red hover:text-red-dark'} transition-colors`}
+          className={`group/link mt-7 pt-6 border-t border-charcoal/8 flex items-center justify-between gap-2 font-head font-bold uppercase tracking-[0.06em] text-[0.8rem] text-charcoal transition-colors group-hover:text-red-dark`}
         >
-          {cta} <ArrowRight size={15} strokeWidth={2.8} className="transition-transform duration-200 group-hover/link:translate-x-1" aria-hidden />
+          {cta}
+          <span className={`inline-flex items-center justify-center w-9 h-9 rounded-card ${a.btn} transition-transform duration-200 group-hover/link:translate-x-1`}>
+            <ArrowRight size={16} strokeWidth={2.8} aria-hidden />
+          </span>
         </a>
       </div>
-
-      {/* Bloco imagem (opcional) */}
-      {image && (
-        <div className={`ph-zoom border border-charcoal/12 ${reverse ? 'lg:order-1' : ''}`}>
-          <picture>
-            <source srcSet={image.replace('.jpg', '.webp')} type="image/webp" />
-            <img src={image} alt={imageAlt} width="1100" height="825" loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-[50%_22%]" />
-          </picture>
-        </div>
-      )}
-      {/* Sem imagem: bloco tipográfico */}
-      {!image && (
-        <div className={`border-l-2 pl-7 lg:pl-12 py-3 ${dark ? 'border-gold-light/40' : 'border-red/30'} ${reverse ? 'lg:order-1' : ''}`}>
-          <p className={`font-display uppercase leading-[1.02] text-[1.7rem] sm:text-[2.3rem] ${dark ? 'text-cream/90' : 'text-charcoal/80'}`}>
-            {spec && spec.length
-              ? spec.join(' · ')
-              : 'Uma conversa de WhatsApp resolve.'}
-          </p>
-        </div>
-      )}
     </Reveal>
   )
 }
 
 function Servicos() {
   return (
-    <section id="servicos" className="bg-cream">
+    <section id="servicos" className="bg-cream-2">
       <Container className="py-20 sm:py-24 lg:py-28">
         <Reveal className="max-w-3xl">
           <Kicker>O que a gente faz</Kicker>
@@ -452,37 +498,8 @@ function Servicos() {
           </p>
         </Reveal>
 
-        {/* Sem imagem por serviço: os números 01/02/03 + tipografia forte
-            separam os serviços. Quando o cliente enviar fotos reais de
-            entrega e de retirada, dá pra colocar uma foto grande por linha. */}
-        <div className="mt-12 lg:mt-14 space-y-14 lg:space-y-16">
-          <ServiceRow
-            n="01"
-            title="Aluguel de caçamba"
-            text="A gente leva a caçamba de 5 m³ até você e busca no fim do prazo. Serve pra reforma, obra, demolição ou aquela limpeza de quintal que junta muito entulho."
-            spec={[PRECO_SEMANAL, PRECO_MENSAL]}
-            cta="Pedir no WhatsApp"
-            href={WA_CACAMBA}
-          />
-
-          <ServiceRow
-            n="02"
-            title="Retirada de entulho"
-            text="Encheu a caçamba? A gente busca, tira o material da frente e leva pro lugar certo. Vale pra obra, reforma, demolição e limpeza de terreno."
-            spec={['Obra e reforma', 'Demolição', 'Limpeza de terreno']}
-            cta="Falar com a gente"
-            href={WA_GERAL}
-            reverse
-          />
-
-          <ServiceRow
-            n="03"
-            title="Troca de caçamba"
-            text="Se a obra é longa e a caçamba enche antes do prazo, a gente vem, tira a cheia e deixa uma vazia no lugar. Você não para a obra."
-            spec={['Caminhão é nosso', 'Sem intermediário']}
-            cta="Combinar a troca"
-            href={WA_GERAL}
-          />
+        <div className="mt-12 lg:mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
+          {SERVICOS.map((s, i) => <ServiceCard key={s.n} delay={i * 80} {...s} />)}
         </div>
       </Container>
     </section>
@@ -512,10 +529,10 @@ function Cacamba() {
             <source srcSet="/mascote/cacamba-logo.webp" type="image/webp" />
             <img
               src="/mascote/cacamba-logo.jpg"
-              alt="Logotipo da Rainha do Entulho pintado na caçamba: coroa, nome e telefone"
-              width="708" height="568"
+              alt="Caçamba da Rainha do Entulho com coroa, nome e telefone, numa obra ao entardecer"
+              width="1800" height="1084"
               loading="lazy" decoding="async"
-              className="absolute inset-0 w-full h-full object-cover object-[44%_46%]"
+              className="absolute inset-0 w-full h-full object-cover object-[58%_58%]"
             />
           </picture>
         </Reveal>
@@ -554,11 +571,18 @@ function Cacamba() {
    COMO FUNCIONA — 4 etapas + mascote (momento 2)
    ================================================================ */
 
+const STEP_ACCENTS = {
+  red: { bg: 'bg-red', text: 'text-red', line: 'bg-red/25' },
+  gold: { bg: 'bg-gold-dark', text: 'text-gold-dark', line: 'bg-gold/30' },
+  charcoal: { bg: 'bg-charcoal', text: 'text-charcoal', line: 'bg-charcoal/20' },
+  redDeep: { bg: 'bg-red-deep', text: 'text-red-deep', line: 'bg-red-deep/25' },
+}
+
 const STEPS = [
-  ['01', 'Chama no WhatsApp', 'Fala onde é a obra e o que você vai jogar fora.'],
-  ['02', 'A gente combina tudo', 'Passa o preço e o dia da entrega na hora.'],
-  ['03', 'A caçamba chega', 'A gente leva até o local no dia combinado.'],
-  ['04', 'Depois a gente busca', 'Encheu ou acabou o prazo? Você avisa e a gente tira.'],
+  { n: '01', icon: MessageCircle, accent: 'red', title: 'Chama no WhatsApp', text: 'Fala onde é a obra e o que você vai jogar fora.' },
+  { n: '02', icon: CheckCircle2, accent: 'gold', title: 'A gente combina tudo', text: 'Passa o preço e o dia da entrega na hora.' },
+  { n: '03', icon: Truck, accent: 'charcoal', title: 'A caçamba chega', text: 'A gente leva até o local no dia combinado.' },
+  { n: '04', icon: RefreshCw, accent: 'redDeep', title: 'Depois a gente busca', text: 'Encheu ou acabou o prazo? Você avisa e a gente tira.' },
 ]
 
 function ComoFunciona() {
@@ -576,30 +600,45 @@ function ComoFunciona() {
           </p>
         </Reveal>
 
-        <div className="mt-12 lg:mt-14 grid lg:grid-cols-[0.55fr_1.45fr] gap-10 lg:gap-14 items-end">
-          {/* Mascote — apoiada na base, ajuda a explicar */}
-          <div className="relative hidden lg:block w-[58%] max-w-[200px] mx-auto lg:mx-0">
-            <div className="absolute inset-x-3 -bottom-1 h-3 rounded-[50%] bg-charcoal/20 blur-md" aria-hidden />
-            <img
-              src="/mascote/rainha-whatsapp.webp"
-              alt="A Rainha do Entulho no celular, atendendo pelo WhatsApp"
-              width="210" height="422"
-              loading="lazy" decoding="async"
-              className="relative w-full h-auto object-contain drop-shadow-[0_14px_20px_rgba(0,0,0,0.2)]"
-            />
-          </div>
+        <div className="mt-12 lg:mt-14 grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+          {/* Foto — a Rainha na obra, com prancheta, celular e a caçamba */}
+          <Reveal className="ph-zoom rounded-card overflow-hidden ring-1 ring-charcoal/10 shadow-card lg:sticky lg:top-28">
+            <picture>
+              <source srcSet="/mascote/rainha-whatsapp.webp" type="image/webp" />
+              <img
+                src="/mascote/rainha-whatsapp.jpg"
+                alt="A Rainha do Entulho numa obra, com prancheta e celular, ao lado da caçamba"
+                width="1448" height="1086"
+                loading="lazy" decoding="async"
+                className="block w-full h-auto"
+              />
+            </picture>
+          </Reveal>
 
-          {/* Etapas */}
-          <ol className="divide-y divide-line border-y border-line">
-            {STEPS.map(([n, title, text], i) => (
-              <Reveal as="li" key={n} delay={i * 70} className="grid grid-cols-[3.5rem_1fr] sm:grid-cols-[6rem_1fr] gap-5 py-6 lg:py-7">
-                <span className="font-display text-[2.6rem] sm:text-[3.4rem] leading-none text-red/20 tabular-nums">{n}</span>
-                <div className="pt-1.5">
-                  <h3 className="font-head font-extrabold text-[1.15rem] text-charcoal uppercase tracking-[0.02em]">{title}</h3>
-                  <p className="mt-2 text-[0.96rem] leading-relaxed text-ink-soft">{text}</p>
-                </div>
-              </Reveal>
-            ))}
+          {/* Etapas — trilha vertical com selo colorido por etapa */}
+          <ol className="relative">
+            {STEPS.map(({ n, icon: Icon, accent, title, text }, i) => {
+              const a = STEP_ACCENTS[accent]
+              const last = i === STEPS.length - 1
+              return (
+                <Reveal as="li" key={n} delay={i * 80} className={`relative flex gap-5 sm:gap-6 ${last ? '' : 'pb-9 lg:pb-10'}`}>
+                  {!last && (
+                    <span className={`absolute left-[27px] sm:left-[31px] top-14 sm:top-16 bottom-0 w-px ${a.line}`} aria-hidden />
+                  )}
+                  <span className={`relative z-10 shrink-0 inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full ${a.bg} text-cream shadow-card`}>
+                    <Icon size={24} strokeWidth={2.2} aria-hidden />
+                  </span>
+                  <div className="pt-1 sm:pt-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className={`font-display text-[1.05rem] tracking-wide tabular-nums ${a.text}`}>{n}</span>
+                      <span className="h-px w-6 bg-line" aria-hidden />
+                    </div>
+                    <h3 className="mt-1.5 font-head font-extrabold text-[1.15rem] sm:text-[1.25rem] text-charcoal uppercase tracking-[0.02em]">{title}</h3>
+                    <p className="mt-2 text-[0.96rem] leading-relaxed text-ink-soft max-w-md">{text}</p>
+                  </div>
+                </Reveal>
+              )
+            })}
           </ol>
         </div>
       </Container>
@@ -611,11 +650,18 @@ function ComoFunciona() {
    POR QUE A RAINHA — diferenciais reais, tipográfico
    ================================================================ */
 
+const DIFF_ACCENTS = {
+  red: 'bg-red text-cream',
+  gold: 'bg-gold-dark text-cream',
+  cream: 'bg-cream text-charcoal',
+  redDeep: 'bg-red-deep text-cream',
+}
+
 const DIFERENCIAIS = [
-  ['Negócio de família', 'Você fala com quem trabalha na empresa, não com central de atendimento.'],
-  ['Preço combinado antes', 'Você sabe quanto vai pagar no WhatsApp, antes da caçamba chegar.'],
-  ['No seu prazo', 'Uma semana ou um mês. A retirada acontece quando você avisar.'],
-  ['Caminhão próprio', 'A gente não repassa pra terceiro. Quem entrega e busca é a Rainha.'],
+  { icon: Users, accent: 'red', title: 'Negócio de família', text: 'Você fala com quem trabalha na empresa, não com central de atendimento.' },
+  { icon: Tag, accent: 'gold', title: 'Preço combinado antes', text: 'Você sabe quanto vai pagar no WhatsApp, antes da caçamba chegar.' },
+  { icon: Clock, accent: 'cream', title: 'No seu prazo', text: 'Uma semana ou um mês. A retirada acontece quando você avisar.' },
+  { icon: Truck, accent: 'redDeep', title: 'Caminhão próprio', text: 'A gente não repassa pra terceiro. Quem entrega e busca é a Rainha.' },
 ]
 
 function PorQue() {
@@ -648,12 +694,20 @@ function PorQue() {
           </Reveal>
         </div>
 
-        {/* Diferenciais — bloco de 4 colunas, estilo ficha */}
-        <div className="mt-14 lg:mt-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10">
-          {DIFERENCIAIS.map(([title, text], i) => (
-            <Reveal key={title} delay={i * 60} className="bg-charcoal p-7 lg:p-9">
-              <span className="font-display text-[0.9rem] text-gold-light/50 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="mt-3 font-display uppercase text-[1.25rem] leading-tight text-gold-light">{title}</h3>
+        {/* Diferenciais — cards com selo colorido por item */}
+        <div className="mt-14 lg:mt-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+          {DIFERENCIAIS.map(({ icon: Icon, accent, title, text }, i) => (
+            <Reveal
+              key={title} delay={i * 70}
+              className="group relative rounded-card bg-white/[0.04] ring-1 ring-white/10 p-7 lg:p-8 transition-all duration-300 ease-smooth hover:bg-white/[0.06] hover:ring-white/20 hover:-translate-y-1"
+            >
+              <span className="absolute top-6 right-6 font-display text-[1.7rem] leading-none text-white/10 tabular-nums" aria-hidden>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span className={`relative inline-flex items-center justify-center w-12 h-12 rounded-full shadow-card ${DIFF_ACCENTS[accent]}`}>
+                <Icon size={21} strokeWidth={2.2} aria-hidden />
+              </span>
+              <h3 className="mt-5 font-display uppercase text-[1.2rem] leading-tight text-gold-light">{title}</h3>
               <p className="mt-3 text-[0.92rem] leading-relaxed text-cream/65">{text}</p>
             </Reveal>
           ))}
@@ -765,7 +819,7 @@ function FAQ() {
 
 function CtaFinal() {
   return (
-    <section id="contato" className="relative overflow-hidden bg-red text-cream">
+    <section id="contato" className="relative overflow-hidden bg-red-crimson text-cream">
       <div className="h-1 edge-gold opacity-90" aria-hidden />
       <Container className="grid lg:grid-cols-[1.3fr_0.7fr] gap-8 items-end">
         <div className="py-16 sm:py-20 lg:py-24">
@@ -793,17 +847,19 @@ function CtaFinal() {
           </Reveal>
         </div>
 
-        {/* Mascote convidando — apoiada na base da seção */}
+        {/* Retrato da Rainha — mesmo vermelho da seção, funde sem borda visível */}
         <Reveal delay={120} className="relative hidden sm:block">
-          <div className="relative mx-auto lg:ml-auto lg:mr-0 w-[62%] sm:w-[54%] lg:w-[86%] max-w-[300px]">
-            <div className="absolute inset-x-6 bottom-1 h-4 rounded-[50%] bg-black/25 blur-lg" aria-hidden />
-            <img
-              src="/mascote/rainha-apresentando.webp"
-              alt="A Rainha do Entulho chamando você pra falar no WhatsApp"
-              width="308" height="436"
-              loading="lazy" decoding="async"
-              className="relative w-full h-auto object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.35)]"
-            />
+          <div className="relative mx-auto lg:ml-auto lg:mr-0 w-[64%] sm:w-[58%] lg:w-[74%] max-w-[320px] aspect-square">
+            <picture>
+              <source srcSet="/mascote/rainha-apresentando.webp" type="image/webp" />
+              <img
+                src="/mascote/rainha-apresentando.jpg"
+                alt="A Rainha do Entulho, de coroa e faixa, chamando você pra falar no WhatsApp"
+                width="1000" height="1000"
+                loading="lazy" decoding="async"
+                className="w-full h-full object-cover"
+              />
+            </picture>
           </div>
         </Reveal>
       </Container>
