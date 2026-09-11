@@ -305,15 +305,15 @@ function Hero() {
             </div>
           </Reveal>
           <Reveal delay={240}>
-            <dl className="mt-10 sm:mt-12 grid grid-cols-3 gap-px bg-line border-y border-line">
+            <dl className="mt-12 grid grid-cols-3 gap-px bg-line border-y border-line">
               {[
                 ['Tamanho', CACAMBA_M3],
                 ['Aluguel', 'Semana ou mês'],
                 ['Atende', 'Uruaçu-GO'],
               ].map(([k, v]) => (
-                <div key={k} className="bg-cream px-2 py-4">
-                  <dt className="font-head text-[0.6rem] sm:text-[0.62rem] font-bold uppercase tracking-[0.12em] text-ink-soft">{k}</dt>
-                  <dd className="mt-1.5 font-head font-extrabold text-[0.9rem] sm:text-[1rem] leading-snug text-charcoal">{v}</dd>
+                <div key={k} className="bg-cream px-1 py-4">
+                  <dt className="font-head text-[0.62rem] font-bold uppercase tracking-[0.14em] text-ink-soft">{k}</dt>
+                  <dd className="mt-1.5 font-head font-extrabold text-[1rem] text-charcoal">{v}</dd>
                 </div>
               ))}
             </dl>
@@ -332,7 +332,7 @@ function Hero() {
                 alt="Caçamba de 5 m³ da Rainha do Entulho carregada de entulho numa obra em Uruaçu-GO"
                 width="1448" height="1086"
                 fetchPriority="high" decoding="async"
-                className="absolute inset-x-0 top-0 h-full lg:-top-[2%] lg:h-[104%] w-full object-cover object-[50%_28%] lg:object-[50%_50%] will-change-transform"
+                className="absolute inset-x-0 -top-[2%] h-[104%] w-full object-cover object-[50%_50%] will-change-transform"
               />
             </picture>
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/30 via-transparent to-transparent" aria-hidden />
@@ -369,7 +369,7 @@ function TrustBar() {
           <Reveal
             key={n}
             delay={i * 60}
-            className={`py-8 px-4 sm:px-6 lg:py-11 lg:px-10 first:pl-0 lg:last:pr-0 ${TRUST_BORDERS[i]}`}
+            className={`py-9 lg:py-11 lg:px-10 lg:first:pl-0 lg:last:pr-0 ${TRUST_BORDERS[i]}`}
           >
             <span className="font-display text-[1rem] text-gold-light/60 tabular-nums">{n}</span>
             <h3 className="mt-2 font-head font-extrabold text-[1.02rem]">{title}</h3>
@@ -524,8 +524,8 @@ function Cacamba() {
     <section id="cacamba" className="bg-charcoal text-cream">
       <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
         {/* Foto grande, full-bleed no lado — detalhe REAL da pintura na caçamba */}
-        <Reveal className="ph-zoom relative min-h-[300px] sm:min-h-[380px] lg:min-h-[540px] border-b lg:border-b-0 lg:border-r border-white/10">
-          <picture className="block">
+        <Reveal className="ph-zoom relative min-h-[360px] lg:min-h-[540px] border-b lg:border-b-0 lg:border-r border-white/10">
+          <picture>
             <source srcSet="/mascote/cacamba-logo.webp" type="image/webp" />
             <img
               src="/mascote/cacamba-logo.jpg"
@@ -550,9 +550,9 @@ function Cacamba() {
 
           <dl className="mt-10 divide-y divide-white/10 border-y border-white/10">
             {SPECS.map(([k, v]) => (
-              <div key={k} className="py-4 sm:grid sm:grid-cols-[12rem_1fr] sm:gap-4">
+              <div key={k} className="grid grid-cols-[9rem_1fr] sm:grid-cols-[12rem_1fr] gap-4 py-4">
                 <dt className="font-head text-[0.68rem] font-bold uppercase tracking-[0.14em] text-cream/50">{k}</dt>
-                <dd className="mt-1 sm:mt-0 font-head font-semibold text-[0.92rem] text-cream tabular-nums">{v}</dd>
+                <dd className="font-head font-semibold text-[0.92rem] text-cream tabular-nums">{v}</dd>
               </div>
             ))}
           </dl>
@@ -603,7 +603,7 @@ function ComoFunciona() {
         <div className="mt-12 lg:mt-14 grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* Foto — a Rainha na obra, com prancheta, celular e a caçamba */}
           <Reveal className="ph-zoom rounded-card overflow-hidden ring-1 ring-charcoal/10 shadow-card lg:sticky lg:top-28">
-            <picture className="block">
+            <picture>
               <source srcSet="/mascote/rainha-whatsapp.webp" type="image/webp" />
               <img
                 src="/mascote/rainha-whatsapp.jpg"
@@ -670,7 +670,7 @@ function PorQue() {
       {/* coroa como assinatura discreta — aparece só aqui */}
       <img
         src="/brand/crown.png" alt="" aria-hidden
-        className="pointer-events-none absolute -right-16 -bottom-12 w-[15rem] lg:-right-24 lg:-bottom-20 lg:w-[26rem] opacity-[0.05] select-none"
+        className="pointer-events-none absolute -right-24 -bottom-20 w-[26rem] opacity-[0.05] select-none"
       />
       <Container className="relative py-20 sm:py-24 lg:py-28">
         <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-start">
@@ -822,7 +822,7 @@ function CtaFinal() {
     <section id="contato" className="relative overflow-hidden bg-red-crimson text-cream">
       <div className="h-1 edge-gold opacity-90" aria-hidden />
       <Container className="grid lg:grid-cols-[1.3fr_0.7fr] gap-8 items-end">
-        <div className="pt-16 pb-8 sm:py-20 lg:py-24">
+        <div className="py-16 sm:py-20 lg:py-24">
           <Reveal>
             <Kicker light>Fala com a gente</Kicker>
             <h2 className="mt-5 font-display uppercase leading-[1.0] text-[2.7rem] sm:text-[3.5rem] lg:text-[4.1rem]">
@@ -848,9 +848,9 @@ function CtaFinal() {
         </div>
 
         {/* Retrato da Rainha — mesmo vermelho da seção, funde sem borda visível */}
-        <Reveal delay={120} className="relative pb-12 sm:pb-0">
-          <div className="relative mx-auto lg:ml-auto lg:mr-0 w-[62%] sm:w-[58%] lg:w-[74%] max-w-[260px] sm:max-w-[320px] aspect-square">
-            <picture className="block">
+        <Reveal delay={120} className="relative hidden sm:block">
+          <div className="relative mx-auto lg:ml-auto lg:mr-0 w-[64%] sm:w-[58%] lg:w-[74%] max-w-[320px] aspect-square">
+            <picture>
               <source srcSet="/mascote/rainha-apresentando.webp" type="image/webp" />
               <img
                 src="/mascote/rainha-apresentando.jpg"
